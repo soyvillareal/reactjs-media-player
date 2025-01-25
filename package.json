@@ -1,0 +1,104 @@
+{
+  "name": "reactjs-media-player",
+  "version": "0.0.1",
+  "description": "A React component for playing a file paths",
+  "main": "lib/index.js",
+  "types": "types/lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib lazy demo coverage *.d.ts",
+    "start": "cp -r examples/react/public/ demo & npm run build:lib --watch=forever & builder examples/react/src/index.tsx --format=iife --bundle --outdir=demo --watch --servedir=demo --log-level=debug --livereload",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
+    "lint:ts": "eslint 'types/**/*.d.ts'",
+    "lint:ts:fix": "eslint 'types/**/*.d.ts' --fix",
+    "test": "jest",
+    "test:cov": "jest --coverage",
+    "test:codecov": "npm run test:coverage && codecov -f coverage/coverage-final.json",
+    "build": "npm run build:lib && npm run build:lazy && npm run build:dist && npm run build:es6",
+    "build:demo": "cp -r examples/react/public demo && npm run build:lib && builder examples/react/src/index.tsx --format=iife --bundle --outdir=demo --minify --sourcemap",
+    "build:lib": "builder \"./src/**/*.{js,jsx}\" --outdir=lib --format=cjs",
+    "build:lazy": "builder \"./src/**/*.{js,jsx}\" --outdir=lazy --format=cjs",
+    "build:dist": "builder ./src/index.js --outfile=dist/ReactJSMediaPlayer.js --format=iife --bundle --minify --sourcemap --global-name=ReactJSMediaPlayer --external:react --external:react-dom --plugin:global-externals='{\"react\":\"globalThis.React\"}' --footer:js='ReactJSMediaPlayer = ReactJSMediaPlayer.default;'",
+    "build:standalone": "builder ./src/standalone.jsx --outfile=dist/ReactJSMediaPlayer.standalone.js --format=iife --bundle --minify --sourcemap --global-name=renderReactJSMediaPlayer --footer:js='renderReactJSMediaPlayer = renderReactJSMediaPlayer.default;'",
+    "build:es6": "builder ./src/standalone.jsx --outfile=dist/ReactJSMediaPlayer.standalone.es6.js --format=esm --bundle --minify --external:react --external:react-dom",
+    "preversion": "npm run lint && npm run test",
+    "version": "auto-changelog -p && npm run build:dist && npm run build:standalone && git add CHANGELOG.md dist",
+    "prepublishOnly": "npm run build && node scripts/pre-publish.js && cp -r types/* .",
+    "postpublish": "node scripts/post-publish.js && npm run clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soyvillareal/reactjs-media-player.git"
+  },
+  "author": "Oscar Garcés (https://github.com/soyvillareal)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/soyvillareal/reactjs-media-player/issues"
+  },
+  "homepage": "https://github.com/soyvillareal/reactjs-media-player",
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "dependencies": {
+    "deepmerge": "^4.0.0",
+    "load-script": "^1.0.0",
+    "memoize-one": "^5.1.1",
+    "minimatch": "^5.1.2",
+    "prop-types": "^15.7.2",
+    "react-fast-compare": "^3.0.1"
+  },
+  "devDependencies": {
+    "@svta/common-media-library": "^0.6.4",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@types/deepmerge": "^2.1.0",
+    "@types/glob": "^8.1.0",
+    "@types/jest": "^29.5.14",
+    "@types/minimatch": "^5.1.2",
+    "@types/node": "^20.17.11",
+    "@types/prop-types": "^15.7.14",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "auto-changelog": "^2.0.0",
+    "builder": "file:./scripts/builder",
+    "codecov": "^3.6.5",
+    "esbuild": "^0.20.2",
+    "esbuild-jest": "^0.5.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "glob": "^11.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "prettier": "^3.4.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rimraf": "^3.0.2",
+    "styled-components": "^6.1.8"
+  },
+  "auto-changelog": {
+    "breakingPattern": "Breaking changes:"
+  },
+  "overrides": {
+    "braces": "^3.0.3",
+    "micromatch": "^4.0.7"
+  },
+  "sideEffects": [
+    "./src/standalone.jsx",
+    "./test/**/*"
+  ],
+  "keywords": [
+    "react",
+    "media",
+    "player",
+    "video",
+    "audio",
+    "hls",
+    "dash",
+    "react-component"
+  ]
+}

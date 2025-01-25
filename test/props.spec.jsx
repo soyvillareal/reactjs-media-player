@@ -1,0 +1,31 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+
+import ReactJSMediaPlayer from '../src';
+
+describe('ReactJSMediaPlayer - props', () => {
+  const renderComponent = (props) => {
+    return render(<ReactJSMediaPlayer {...props} />);
+  };
+
+  test('className', () => {
+    renderComponent({ className: 'react-player' });
+    expect(screen.getByTestId('media-player-skin')).toHaveClass('react-player');
+  });
+
+  test('style', () => {
+    renderComponent({ style: { marginTop: '1rem' } });
+    expect(screen.getByTestId('media-player-skin')).toHaveStyle('margin-top:1rem;');
+  });
+
+  test('wrapper - string', () => {
+    renderComponent({ wrapper: 'span' });
+    expect(screen.getByTestId('media-player-skin').nodeName.toLowerCase()).toBe('span');
+  });
+
+  // test('wrapper - element', (t) => {
+  //   const Element = () => null;
+  //   renderComponent({ wrapper: Element });
+  //   expect(screen.queryByTestId('media-player-skin')).toBeFalsy();
+  // });
+});

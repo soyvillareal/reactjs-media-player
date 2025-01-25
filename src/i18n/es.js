@@ -1,0 +1,18 @@
+export default {
+  exitFullScreenMode: 'Salir del modo de pantalla completa (f)',
+  fullScreen: 'Pantalla completa',
+  play: 'Reproducir',
+  pause: 'Pausar',
+  normal: 'Normal',
+  settings: 'Configuración',
+  speed: 'Velocidad',
+  quality: 'Calidad',
+  hd: 'HD',
+  live: 'En vivo',
+  clickToUnmute: 'Haga clic para desactivar el silencio',
+  playbackStuckClickResumePlayback: 'La reproducción está bloqueada, haga clic para reanudar la reproducción.',
+  mute: 'Silenciar (m)',
+  activateSound: 'Activar sonido',
+  thisVideoHasNoSound: 'Este video no tiene sonido',
+  timeBar: 'Barra de tiempo',
+};
