@@ -66,3 +66,15 @@ jobs:
         uses: martinbeentjes/npm-get-version-action@v1.3.1
       - name: Released ${{ steps.npm-version.outputs.current-version}} ✨
         run: echo ${{ steps.npm-version.outputs.current-version}}
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.npm-version.outputs.current-version }}
+          release_name: v${{ steps.npm-version.outputs.current-version }}
+          body: |
+            🎉 New release v${{ steps.npm-version.outputs.current-version }} is now available!
+            - View the changelog for more details.
+          draft: false
+          prerelease: ${{ inputs.prerelease != '' }}
