@@ -1,5 +1,4 @@
 .github
-babel.config.js
 codecov.yml
 coverage
 src
@@ -8,5 +7,4 @@ webpack/*
 yarn-error.log
 /demo/
 /examples/
-/disttest/
 /scripts/

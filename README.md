@@ -18,7 +18,7 @@
 > The next step... Supporting React Native 🚀
 
 ### ✨ The future of ReactJS Media Player
-ReactJS Media Player is maintained [by me](https://www.soyvillarean.com). I'm committed to improving video tools for developers, but anyone who wants to contribute is welcome.
+ReactJS Media Player is maintained [by me](https://soyvillareal.com). I'm committed to improving video tools for developers, but anyone who wants to contribute is welcome.
 
 ReactJS Media Player is and will remain open source, for a higher rate of fixes and releases over time. Thanks to all community members for their continued support.
 
