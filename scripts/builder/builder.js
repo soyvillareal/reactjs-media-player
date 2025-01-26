@@ -67,7 +67,6 @@ export async function build(positionals, args) {
     metafile: args.metafile,
     sourcemap: args.sourcemap,
     globalName: args['global-name'],
-    jsx: 'automatic',
     external: argsArray(args, 'external'),
     outExtension: argsObject(args, 'out-extension'),
     banner: argsObject(args, 'banner'),

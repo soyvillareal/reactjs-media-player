@@ -34,7 +34,7 @@
   "bugs": {
     "url": "https://github.com/soyvillareal/reactjs-media-player/issues"
   },
-  "homepage": "https://github.com/soyvillareal/reactjs-media-player",
+  "homepage": "https://soyvillareal.github.io/reactjs-media-player",
   "peerDependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
