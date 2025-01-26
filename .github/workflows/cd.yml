@@ -60,7 +60,16 @@ jobs:
       - run: npm run build:demo
       - run: npm run build:dist
       - run: npm run build:standalone
-      - run: npx --yes wet-run@1.0.1 release ${{ inputs.version }} ${{ inputs.dryrun && '--dry-run' || '' }} ${{ inputs.prerelease && format('--prerelease {0}', inputs.prerelease) || '' }} --provenance --github-release --verbose
+
+      - name: Debug coverage directory
+        run: ls -R ./coverage || echo "Coverage directory not found"
+
+      - name: Verify coverage file
+        run: |
+          if [ ! -f ./coverage/lcov.info ]; then
+            echo "Coverage file not found!";
+            exit 1;
+          fi
 
       - name: Upload coverage reports to Codecov
         if: ${{ inputs.dryrun != null }}
@@ -70,6 +79,7 @@ jobs:
           directory: ./coverage
           files: ./coverage/lcov.info
           flags: unittests
+          fail_ci_if_error: true
           
       - name: Get NPM version
         id: npm-version
