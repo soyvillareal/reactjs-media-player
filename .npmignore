@@ -3,7 +3,6 @@ codecov.yml
 coverage
 src
 test
-dist
 webpack/*
 yarn-error.log
 /demo/
