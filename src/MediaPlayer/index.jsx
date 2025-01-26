@@ -17,7 +17,7 @@ const UniversalSuspense = IS_BROWSER || IS_GLOBAL ? React.Suspense : () => null;
 
 export const createMediaPlayer = (player) => {
   return class MediaPlayer extends React.Component {
-    static displayName = 'MediaPlayer';
+    static displayName = 'ReactJSMediaPlayer';
     static propTypes = propTypes;
     static defaultProps = defaultProps;
 
