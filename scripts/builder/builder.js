@@ -34,18 +34,26 @@ export async function build(positionals, args) {
   const plugins = {
     'global-externals': (arg) => {
       const options = JSON.parse(arg);
-      const filter = new RegExp(`^${Object.keys(options)}$`);
 
       return {
         name: 'global-externals-plugin',
         setup(build) {
-          build.onResolve({ filter }, (args) => ({
-            path: args.path,
-            namespace: 'global-externals-plugin',
-          }));
+          build.onResolve({ filter: /.*/ }, (args) => {
+            if (options[args.path]) {
+              return {
+                path: args.path,
+                namespace: 'global-externals-plugin',
+              };
+            }
+            return null;
+          });
+
           build.onLoad({ filter: /.*/, namespace: 'global-externals-plugin' }, (args) => {
-            const contents = `module.exports = ${options[args.path]}`;
-            return { contents };
+            if (options[args.path]) {
+              const contents = `module.exports = ${options[args.path]}`;
+              return { contents };
+            }
+            return null;
           });
         },
       };

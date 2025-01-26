@@ -17,7 +17,7 @@
     "build:demo": "cp -r examples/react/public demo && npm run build:lib && builder examples/react/src/index.tsx --format=iife --bundle --outdir=demo --minify --sourcemap",
     "build:lib": "builder \"./src/**/*.{js,jsx}\" --outdir=lib --format=cjs",
     "build:lazy": "builder \"./src/**/*.{js,jsx}\" --outdir=lazy --format=cjs",
-    "build:dist": "builder ./src/index.js --outfile=dist/ReactJSMediaPlayer.js --format=iife --bundle --minify --sourcemap --global-name=ReactJSMediaPlayer --external:react --external:react-dom --plugin:global-externals='{\"react\":\"globalThis.React\"}' --footer:js='ReactJSMediaPlayer = ReactJSMediaPlayer.default;'",
+    "build:dist": "builder ./src/index.js --outfile=dist/ReactJSMediaPlayer.js --format=iife --bundle --minify --sourcemap --global-name=ReactJSMediaPlayer --external:react --external:react-dom --plugin:global-externals='{\"react\":\"globalThis.React\",\"react-dom\":\"globalThis.ReactDOM\"}' --footer:js='ReactJSMediaPlayer = ReactJSMediaPlayer.default;'",
     "build:standalone": "builder ./src/standalone.jsx --outfile=dist/ReactJSMediaPlayer.standalone.js --format=iife --bundle --minify --sourcemap --global-name=renderReactJSMediaPlayer --footer:js='renderReactJSMediaPlayer = renderReactJSMediaPlayer.default;'",
     "build:es6": "builder ./src/standalone.jsx --outfile=dist/ReactJSMediaPlayer.standalone.es6.js --format=esm --bundle --minify --external:react --external:react-dom",
     "preversion": "npm run lint && npm run test",
