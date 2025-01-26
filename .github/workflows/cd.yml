@@ -72,7 +72,7 @@ jobs:
           fi
 
       - name: Upload coverage reports to Codecov
-        if: ${{ inputs.dryrun != null }}
+        if: ${{ inputs.dryrun == null }}
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -89,7 +89,7 @@ jobs:
         run: echo ${{ steps.npm-version.outputs.current-version}}
 
       - name: Create GitHub Release
-        if: ${{ inputs.version != '' && inputs.dryrun != null }}
+        if: ${{ inputs.version != '' && inputs.dryrun == null }}
         uses: actions/create-release@v1
         with:
           tag_name: ${{ inputs.version }}
