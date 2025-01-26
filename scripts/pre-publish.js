@@ -1,7 +1,7 @@
 const { join } = require('path');
 const { writeFile } = require('fs').promises;
 
-const generateSinglePlayers = async () => {
+const generateSinglePlayer = async () => {
   const file = `
       var createMediaPlayer = require('./lib/MediaPlayer').createMediaPlayer
       var Player = require('./lib/core/PlayerCore').default
@@ -14,4 +14,4 @@ const generateSinglePlayers = async () => {
   await writeFile(join('.', 'reactjs-media-player.js'), file);
 };
 
-generateSinglePlayers();
+generateSinglePlayer();

@@ -9,8 +9,8 @@ describe('ReactJSMediaPlayer - props', () => {
   };
 
   test('className', () => {
-    renderComponent({ className: 'react-player' });
-    expect(screen.getByTestId('media-player-skin')).toHaveClass('react-player');
+    renderComponent({ className: 'reactjs-player' });
+    expect(screen.getByTestId('media-player-skin')).toHaveClass('reactjs-player');
   });
 
   test('style', () => {

@@ -15,8 +15,6 @@
 
 ---
 
-> The next step... Supporting React Native 🚀
-
 ### ✨ The future of ReactJS Media Player
 ReactJS Media Player is maintained [by me](https://soyvillareal.com). I'm committed to improving video tools for developers, but anyone who wants to contribute is welcome.
 
@@ -25,7 +23,7 @@ ReactJS Media Player is and will remain open source, for a higher rate of fixes 
 ### Usage
 
 ```bash
-npm install reactjs-media-player # or yarn add react-player
+npm install reactjs-media-player # or yarn add reactjs-media-player
 ```
 
 ```jsx
@@ -176,7 +174,7 @@ class ResponsivePlayer extends Component {
   padding-top: 56.25%; /* Player ratio: 100 / (1280 / 720) */
 }
 
-.react-player {
+.reactjs-media-player {
   position: absolute;
   top: 0;
   left: 0;
