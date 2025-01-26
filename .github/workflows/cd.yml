@@ -61,16 +61,6 @@ jobs:
       - run: npm run build:dist
       - run: npm run build:standalone
 
-      - name: Debug coverage directory
-        run: ls -R ./coverage || echo "Coverage directory not found"
-
-      - name: Verify coverage file
-        run: |
-          if [ ! -f ./coverage/lcov.info ]; then
-            echo "Coverage file not found!";
-            exit 1;
-          fi
-
       - name: Upload coverage reports to Codecov
         if: ${{ inputs.dryrun == null }}
         uses: codecov/codecov-action@v2
@@ -84,18 +74,15 @@ jobs:
       - name: Get NPM version
         id: npm-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
-        
-      - name: Released ${{ steps.npm-version.outputs.current-version}} ✨
-        run: echo ${{ steps.npm-version.outputs.current-version}}
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release ✨
         if: ${{ inputs.version != '' && inputs.dryrun == null }}
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ inputs.version }}
-          release_name: ${{ inputs.version }}
+          tag_name: ${{ steps.npm-version.outputs.current-version }}
+          release_name: ${{ steps.npm-version.outputs.current-version }}
           body: |
-            Release notes for ${{ inputs.version }}
+            Release notes for ${{ steps.npm-version.outputs.current-version }}
             
             Provenance:
             - Commit: ${{ github.sha }}
