@@ -60,6 +60,7 @@ jobs:
       - run: npm run build:demo
       - run: npm run build:dist
       - run: npm run build:standalone
+      - run: npx --yes wet-run@1.0.1 release ${{ inputs.version }} ${{ inputs.dryrun && '--dry-run' || '' }} ${{ inputs.prerelease && format('--prerelease {0}', inputs.prerelease) || '' }} --provenance --github-release --verbose
 
       - name: Upload coverage reports to Codecov
         if: ${{ inputs.dryrun == null }}
@@ -74,22 +75,6 @@ jobs:
       - name: Get NPM version
         id: npm-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
-
-      - name: Create GitHub Release ✨
-        if: ${{ inputs.version != '' && inputs.dryrun == null }}
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ steps.npm-version.outputs.current-version }}
-          release_name: ${{ steps.npm-version.outputs.current-version }}
-          body: |
-            Release notes for ${{ steps.npm-version.outputs.current-version }}
-            
-            Provenance:
-            - Commit: ${{ github.sha }}
-            - Workflow: ${{ github.workflow }}
-            - Job: ${{ github.job }}
-          draft: ${{ inputs.dryrun || false }}
-          prerelease: ${{ inputs.prerelease || false }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ACTIONS_STEP_DEBUG: true
+        
+      - name: Released ${{ steps.npm-version.outputs.current-version}} ✨
+        run: echo ${{ steps.npm-version.outputs.current-version}}
