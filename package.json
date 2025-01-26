@@ -1,6 +1,6 @@
 {
   "name": "reactjs-media-player",
-  "version": "0.1.4-alpha.0",
+  "version": "0.1.5-alpha.0",
   "description": "A React component for playing a file paths",
   "main": "lib/index.js",
   "typings": "types/lib/index.d.ts",
