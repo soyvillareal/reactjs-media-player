@@ -8,7 +8,6 @@ export const propTypes = {
   spriteVTTFile: PropTypes.string,
   playing: bool,
   loop: bool,
-  controls: bool,
   volume: number,
   muted: bool,
   playbackRate: number,
@@ -54,7 +53,6 @@ const noop = () => {};
 export const defaultProps = {
   playing: false,
   loop: false,
-  controls: false,
   volume: null,
   muted: false,
   playbackRate: 1,

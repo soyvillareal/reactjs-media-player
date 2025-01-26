@@ -20,8 +20,9 @@
 
 .player-wrapper {
   width: 720px;
-  height: 480px;
+  height: 410px;
   position: relative;
+  padding-bottom: 10px;
 }
 
 .react-player {

@@ -10,7 +10,7 @@ yarn-error.log
 .idea/
 .vscode/
 /examples/local
-/examples/react/public/uploads/segments
+/examples/react/public/uploads
 *.flv
 *.mp4
 *.mpd

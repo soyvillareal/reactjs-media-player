@@ -362,7 +362,7 @@ export default class PlayerCore extends React.Component {
   };
 
   render() {
-    const { url, playing, loop, controls, muted, config, width, height } = this.props;
+    const { url, playing, loop, muted, config, width, height } = this.props;
 
     const style = {
       width: width === 'auto' ? width : '100%',
@@ -377,7 +377,7 @@ export default class PlayerCore extends React.Component {
         style={style}
         preload="auto"
         autoPlay={playing || undefined}
-        controls={controls}
+        controls={false}
         muted={muted}
         loop={loop}
         {...config.attributes}

@@ -1,8 +1,8 @@
 export interface IState {
-  url: string | string[] | null;
+  urlFile: string | null;
+  spriteVTTFile: string | null;
   pip: boolean;
   playing: boolean;
-  controls: boolean;
   volume: number;
   muted: boolean;
   played: number;
@@ -11,4 +11,5 @@ export interface IState {
   playbackRate: number;
   loop: boolean;
   seeking: boolean;
+  poster: string | null;
 }

@@ -31,7 +31,6 @@ export interface IBaseReactJSMediaPlayerCommons {
   waiting?: boolean;
   playing?: boolean;
   loop?: boolean;
-  controls?: boolean;
   volume?: number;
   muted?: boolean;
   playbackRate?: number;

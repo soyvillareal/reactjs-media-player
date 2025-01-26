@@ -307,7 +307,6 @@ export default class PlayerProxy extends React.Component {
 
     return (
       <Player
-        controls={this.props.controls}
         loop={this.props.loop}
         muted={this.props.muted}
         playsinline={this.props.playsinline}

@@ -9,14 +9,16 @@ import { IState } from './types/App.types';
 const SEPARATOR = ' · ';
 
 const App = () => {
-  const urlInputRef = React.useRef<HTMLInputElement>(null);
+  const urlFileInputRef = React.useRef<HTMLInputElement>(null);
+  const urlVTTInputRef = React.useRef<HTMLInputElement>(null);
+  const urlPosterInputRef = React.useRef<HTMLInputElement>(null);
   const ref = React.useRef<any>();
 
   const [state, setState] = React.useState<IState>({
-    url: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+    urlFile: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+    spriteVTTFile: null,
     pip: false,
     playing: false,
-    controls: false,
     volume: 0.8,
     muted: false,
     played: 0,
@@ -25,15 +27,16 @@ const App = () => {
     playbackRate: 1.0,
     loop: false,
     seeking: false,
+    poster: './example-poster.jpg',
   });
 
-  const load = useCallback((url) => {
+  const load = useCallback((urlFile: string) => {
     setState({
-      url,
+      urlFile,
+      spriteVTTFile: null,
       played: 0,
       loaded: 0,
       pip: false,
-      controls: false,
       duration: 0,
       loop: false,
       muted: false,
@@ -41,6 +44,7 @@ const App = () => {
       playing: false,
       seeking: false,
       volume: 0.8,
+      poster: './example-poster.jpg',
     });
   }, []);
 
@@ -52,18 +56,10 @@ const App = () => {
     setState((prev) => ({ ...prev, url: null, playing: false }));
   }, []);
 
-  const handleToggleControls = useCallback(() => {
-    setState((prev) => ({
-      ...prev,
-      controls: !prev.controls,
-      url: null,
-    }));
-  }, []);
-
   useEffect(() => {
-    const url = state.url;
+    const url = state.urlFile;
     load(url);
-  }, [load, state.url]);
+  }, [load, state.urlFile]);
 
   const handleToggleLoop = useCallback(() => {
     setState((prev) => ({ ...prev, loop: !prev.loop }));
@@ -172,44 +168,17 @@ const App = () => {
             className="reactjs-player"
             width="100%"
             height="100%"
-            url={state.url}
+            url={state.urlFile}
             language="es"
-            spriteVTTFile="./uploads/videos/f08e80da-bf1d-4e3d-8899-f0f6155f6efa_video_sprite.vtt"
-            poster="./example-poster.jpg"
+            spriteVTTFile={state.spriteVTTFile}
+            poster={state.poster}
             fullHDQualityBreak={720}
-            // sources={[
-            //   {
-            //     src: '/uploads/videos/f08e80da-bf1d-4e3d-8899-f0f6155f6efa_video_1080_4800000_load.m3u8',
-            //     resolution: 1080,
-            //   },
-            //   {
-            //     src: '/uploads/videos/f08e80da-bf1d-4e3d-8899-f0f6155f6efa_video_720_2400000_load.m3u8',
-            //     resolution: 720,
-            //   },
-            //   {
-            //     src: '/uploads/videos/f08e80da-bf1d-4e3d-8899-f0f6155f6efa_video_540_1200000_load.m3u8',
-            //     resolution: 540,
-            //   },
-            //   {
-            //     src: '/uploads/videos/f08e80da-bf1d-4e3d-8899-f0f6155f6efa_video_360_800000_load.m3u8',
-            //     type: 'application/x-mpegURL',
-            //     resolution: 360,
-            //   },
-            //   {
-            //     src: '/uploads/videos/f08e80da-bf1d-4e3d-8899-f0f6155f6efa_video_270_400000_load.m3u8',
-            //     resolution: 270,
-            //   },
-            //   {
-            //     src: '/uploads/videos/f08e80da-bf1d-4e3d-8899-f0f6155f6efa_video_144p_load.m3u8',
-            //     resolution: 144,
-            //   },
-            // ]}
+            sources={[]}
             prevented={false}
             waiting={false}
             playing={state.playing}
             muted={state.muted}
             pip={state.pip}
-            controls={state.controls}
             loop={state.loop}
             playbackRate={state.playbackRate}
             volume={state.volume}
@@ -238,7 +207,7 @@ const App = () => {
                 <button onClick={handleStop}>Stop</button>
                 <button onClick={handlePlayPause}>{state.playing ? 'Pause' : 'Play'}</button>
                 <button onClick={handleClickFullscreen}>Fullscreen</button>
-                {ReactJSMediaPlayer.canEnablePIP(state.url) && (
+                {ReactJSMediaPlayer.canEnablePIP(state.urlFile) && (
                   <button onClick={handleTogglePIP}>{state.pip ? 'Disable PiP' : 'Enable PiP'}</button>
                 )}
               </td>
@@ -280,15 +249,6 @@ const App = () => {
             </tr>
             <tr>
               <th>
-                <label htmlFor="controls">Controls</label>
-              </th>
-              <td>
-                <input id="controls" type="checkbox" checked={state.controls} onChange={handleToggleControls} />
-                <em>&nbsp; Requires player reload</em>
-              </td>
-            </tr>
-            <tr>
-              <th>
                 <label htmlFor="muted">Muted</label>
               </th>
               <td>
@@ -319,6 +279,7 @@ const App = () => {
         </table>
       </section>
       <section className="section">
+        <h2>Files</h2>
         <table>
           <tbody>
             <tr>
@@ -343,15 +304,51 @@ const App = () => {
                 )}
               </td>
             </tr>
+          </tbody>
+        </table>
+        <table>
+          <tbody>
             <tr>
-              <th>Custom URL</th>
+              <th>File URL</th>
               <td>
-                <input ref={urlInputRef} type="text" placeholder="Enter URL" />
+                <input ref={urlFileInputRef} type="text" placeholder="Custom File URL" />
                 <button
                   onClick={() =>
                     setState((prev) => ({
                       ...prev,
-                      url: urlInputRef?.current !== null ? urlInputRef.current.value : null,
+                      url: urlFileInputRef?.current !== null ? urlFileInputRef.current.value : null,
+                    }))
+                  }
+                >
+                  Load
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th>VTT File</th>
+              <td>
+                <input ref={urlVTTInputRef} type="text" placeholder="Custom Sprite VTT File URL" />
+                <button
+                  onClick={() =>
+                    setState((prev) => ({
+                      ...prev,
+                      url: urlVTTInputRef?.current !== null ? urlVTTInputRef.current.value : null,
+                    }))
+                  }
+                >
+                  Load
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th>Poster</th>
+              <td>
+                <input ref={urlPosterInputRef} type="text" placeholder="Custom Poster URL" />
+                <button
+                  onClick={() =>
+                    setState((prev) => ({
+                      ...prev,
+                      poster: urlPosterInputRef?.current !== null ? urlPosterInputRef.current.value : null,
                     }))
                   }
                 >
@@ -361,16 +358,16 @@ const App = () => {
             </tr>
           </tbody>
         </table>
+      </section>
 
+      <section className="section">
         <h2>State</h2>
 
         <table>
           <tbody>
             <tr>
               <th>url</th>
-              <td className={!state.url ? 'faded' : ''}>
-                {(state.url instanceof Array ? 'Multiple' : state.url) || 'null'}
-              </td>
+              <td className={!state.urlFile ? 'faded' : ''}>{state.urlFile}</td>
             </tr>
             <tr>
               <th>playing</th>

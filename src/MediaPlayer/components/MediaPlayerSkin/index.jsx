@@ -98,7 +98,6 @@ const MediaPlayerSkin = React.forwardRef((props, ref) => {
           <PlayerProxy
             ref={ref}
             activePlayer={props.activePlayer}
-            controls={props.controls}
             loop={playerState.loop}
             muted={playerState.isMuted}
             pip={playerState.isPIP}
@@ -183,7 +182,6 @@ export default React.memo(
     p.waiting === n.waiting &&
     p.playing === n.playing &&
     p.loop === n.loop &&
-    p.controls === n.controls &&
     p.volume === n.volume &&
     p.muted === n.muted &&
     p.paused === n.paused &&

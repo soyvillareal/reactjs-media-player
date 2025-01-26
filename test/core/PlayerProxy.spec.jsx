@@ -33,7 +33,6 @@ jest.mock('../../src/core/PlayerCore', () => {
 
 describe('PlayerProxy Component', () => {
   const props = {
-    controls: true,
     loop: false,
     muted: false,
     pip: false,

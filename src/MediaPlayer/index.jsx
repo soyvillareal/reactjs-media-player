@@ -147,7 +147,6 @@ export const createMediaPlayer = (player) => {
           ref={this.references.player}
           activePlayer={player.lazyPlayer}
           player={this.player}
-          controls={this.props.controls}
           loop={this.props.loop}
           muted={this.props.muted}
           pip={this.props.pip}
