@@ -26,6 +26,10 @@ on:
         - alpha
         - canary
         - beta
+      coverage:
+        description: 'Coverage'
+        type: boolean
+        default: true
       dryrun:
         description: 'Dry-run'
         type: boolean
@@ -64,7 +68,7 @@ jobs:
         run: npm run test:cov
 
       - name: Upload coverage reports to Codecov
-        if: ${{ inputs.dryrun == null }}
+        if: ${{ inputs.dryrun == null || inputs.coverage == true }}
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}

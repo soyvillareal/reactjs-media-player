@@ -181,6 +181,8 @@ class ResponsivePlayer extends Component {
 }
 ```
 
+See [`jsFiddle` example](https://jsfiddle.net/oqy10s8k/18/)
+
 #### SDK Overrides
 
 You can use your own version of any player SDK, assuming the correct `window` global is set before the player mounts. For example, to use a local version of [`hls.js`](https://cdnjs.com/libraries/hls.js), add `<script src='/path/hls.js'></script>` to your app. If `window.Hls` is available when `ReactJSMediaPlayer` mounts, it will use that instead of loading `hls.js` from `cdnjs`.
@@ -202,6 +204,8 @@ If you aren’t using React, you can still render a player using the standalone 
   }
 </script>
 ```
+
+See [`jsFiddle` example](https://jsfiddle.net/oqy10s8k/19/)
 
 #### Mobile considerations
 
