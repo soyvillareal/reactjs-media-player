@@ -4,10 +4,10 @@ import BaseReactJSMediaPlayer, {
   IBaseReactJSMediaPlayerWithSourcesNever,
   IBaseReactJSMediaPlayerWithUrl,
   IBaseReactJSMediaPlayerWithUrlNever,
-} from '../base';
-import { HlsConfig } from '../hls.js/index.js';
+} from './base';
+import { HlsConfig } from './hlsjs.js';
 
-export interface TrackProps {
+export interface ITrackProps {
   kind: string;
   src: string;
   srcLang: string;
@@ -16,8 +16,8 @@ export interface TrackProps {
 }
 
 export interface IPlayerCoreConfig {
-  attributes?: Record<string, any>;
-  tracks?: TrackProps[];
+  attributes: HTMLVideoElement['attributes'];
+  tracks?: ITrackProps[];
   forceVideo?: boolean;
   forceHLS?: boolean;
   forceSafariHLS?: boolean;
@@ -28,6 +28,8 @@ export interface IPlayerCoreConfig {
   hlsVersion?: string;
   dashVersion?: string;
   flvVersion?: string;
+  forceLoad: boolean;
+  loopOnEnded: boolean;
 }
 
 export interface IPlayerCoreWithUrl extends IBaseReactJSMediaPlayerWithUrl {

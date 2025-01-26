@@ -1,9 +1,9 @@
 import { Component, ReactElement, CSSProperties } from 'react';
 
-import ReactJSMediaPlayer from '../lib';
-import dashjs from '../dash.js/index.js';
-import hlsjs from '../hls.js/index.js';
-import flvJs from '../flv.js/index.js';
+import ReactJSMediaPlayer from './lib';
+import dashjs from './dashjs';
+import hlsjs from './hlsjs';
+import flvJs from './flvjs';
 
 export type TActionErrorEventPlayer = (
   error: hlsjs.Events.ERROR | Event,

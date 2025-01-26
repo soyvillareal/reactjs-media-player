@@ -3,7 +3,7 @@
   "version": "0.1.3-alpha.1",
   "description": "A React component for playing a file paths",
   "main": "lib/index.js",
-  "types": "types/lib/index.d.ts",
+  "typings": "types/lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib lazy demo coverage *.d.ts",
     "start": "cp -r examples/react/public/ demo & npm run build:lib --watch=forever & builder examples/react/src/index.tsx --format=iife --bundle --outdir=demo --watch --servedir=demo --log-level=debug --livereload",
