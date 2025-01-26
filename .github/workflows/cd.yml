@@ -22,6 +22,7 @@ on:
         type: choice
         description: Pre-release
         options:
+        - none
         - alpha
         - canary
         - beta
@@ -29,7 +30,7 @@ on:
         description: 'Dry-run'
         type: boolean
 
-run-name: Deploy ${{ inputs.version }} ${{ inputs.dryrun && '--dry-run' || '' }} ${{ inputs.prerelease && format('--prerelease {0}', inputs.prerelease) || '' }}
+run-name: Deploy ${{ inputs.version }} ${{ inputs.dryrun && '--dry-run' || '' }} ${{ inputs.prerelease != 'none' && format('--prerelease {0}', inputs.prerelease) || '' }}
 
 jobs:
   deploy:
@@ -80,7 +81,7 @@ jobs:
           npm run build:standalone
       
       - uses: fregante/setup-git-user@v1
-      - run: npx --yes wet-run@1.0.1 release ${{ inputs.version }} ${{ inputs.dryrun && '--dry-run' || '' }} ${{ inputs.prerelease && format('--prerelease {0}', inputs.prerelease) || '' }} --provenance --github-release --verbose
+      - run: npx --yes wet-run@1.0.1 release ${{ inputs.version }} ${{ inputs.dryrun && '--dry-run' || '' }} ${{ inputs.prerelease != 'none' && format('--prerelease {0}', inputs.prerelease) || '' }} --provenance --github-release --verbose
           
       - name: Get NPM version
         id: npm-version
