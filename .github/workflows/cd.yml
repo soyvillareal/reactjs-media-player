@@ -61,25 +61,37 @@ jobs:
       - run: npm run build:dist
       - run: npm run build:standalone
       - run: npx --yes wet-run@1.0.1 release ${{ inputs.version }} ${{ inputs.dryrun && '--dry-run' || '' }} ${{ inputs.prerelease && format('--prerelease {0}', inputs.prerelease) || '' }} --provenance --github-release --verbose
+
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: soyvillareal/reactjs-media-player
+          directory: ./coverage
+          files: ./coverage/lcov.info
+          flags: unittests
+          
       - name: Get NPM version
         id: npm-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
+        
       - name: Released ${{ steps.npm-version.outputs.current-version}} ✨
         run: echo ${{ steps.npm-version.outputs.current-version}}
+
       - name: Create GitHub Release
+        if: ${{ inputs.version != '' && inputs.dryrun != null }}
         uses: actions/create-release@v1
+        with:
+          tag_name: ${{ inputs.version }}
+          release_name: ${{ inputs.version }}
+          body: |
+            Release notes for ${{ inputs.version }}
+            
+            Provenance:
+            - Commit: ${{ github.sha }}
+            - Workflow: ${{ github.workflow }}
+            - Job: ${{ github.job }}
+          draft: ${{ inputs.dryrun || false }}
+          prerelease: ${{ inputs.prerelease || false }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ steps.npm-version.outputs.current-version }}
-          release_name: v${{ steps.npm-version.outputs.current-version }}
-          body: |
-            🎉 New release v${{ steps.npm-version.outputs.current-version }} is now available!
-            - View the changelog for more details.
-          draft: false
-          prerelease: ${{ inputs.prerelease != '' }}
+          ACTIONS_STEP_DEBUG: true
