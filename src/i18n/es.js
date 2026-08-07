@@ -15,4 +15,6 @@ export default {
   activateSound: 'Activar sonido',
   thisVideoHasNoSound: 'Este video no tiene sonido',
   timeBar: 'Barra de tiempo',
+  loop: 'En Bucle',
+  pictureInPicture: 'Pantalla en pantalla',
 };

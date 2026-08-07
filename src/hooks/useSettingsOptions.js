@@ -138,17 +138,18 @@ const useSettingsOptions = ({ live, fullHDQualityBreak, qualities, playbackRate,
   // Track previous values to only call changeSettings when user makes a selection
   const prevValuesRef = React.useRef(values);
   React.useEffect(() => {
-    if (prevValuesRef.current !== values) {
+    const prev = prevValuesRef.current;
+    if (prev !== values) {
+      prevValuesRef.current = values;
       const changed = {};
-      if (prevValuesRef.current.speed?.value !== values.speed?.value) {
+      if (prev.speed?.value !== values.speed?.value) {
         changed.speed = values.speed;
       }
-      if (prevValuesRef.current.quality?.value !== values.quality?.value) {
+      if (prev.quality?.value !== values.quality?.value) {
         changed.quality = values.quality;
       }
-      prevValuesRef.current = values;
       if (changed.speed || changed.quality) {
-        changeSettings({ ...values, ...changed });
+        changeSettings(changed);
       }
     }
   }, [values, changeSettings]);

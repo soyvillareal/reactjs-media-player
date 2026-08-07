@@ -56,6 +56,8 @@ export default class PlayerProxy extends React.Component {
       this.props;
 
     if (isEqual(prevProps.url, url) === false) {
+      // Clear any existing progress loop to prevent multiple simultaneous loops
+      clearTimeout(this.progressTimeout);
       if (this.isLoading && !activePlayer?.forceLoad && !disableDeferredLoading && !isMediaStream(url)) {
         console.warn(`ReactJSMediaPlayer: the attempt to load ${url} is being deferred until the player has loaded`);
         this.loadOnReady = url;

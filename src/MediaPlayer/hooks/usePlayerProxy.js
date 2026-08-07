@@ -48,15 +48,23 @@ const usePlayerProxy = ({
       if (sources && sources.length > 0) {
         const sourcesIndexByResolution = indexBy(sources, 'resolution');
         if (autoVideoUrl === null && sourcesIndexByResolution) {
-          const speed = await measureNetworkSpeedGeneratedFile();
-          if (cancelled) return;
-          const speeds = Object.keys(sourcesIndexByResolution).map(Number);
-          const recommendedQuality = getRecommendedVideoQuality(speed || 0, speeds);
+          try {
+            const speed = await measureNetworkSpeedGeneratedFile();
+            if (cancelled) return;
+            const speeds = Object.keys(sourcesIndexByResolution).map(Number);
+            const recommendedQuality = getRecommendedVideoQuality(speed || 0, speeds);
 
-          if (speed !== null && recommendedQuality) {
-            setAutoVideoUrl(sourcesIndexByResolution[recommendedQuality?.toString()]?.src ?? sources[0].src);
-            updateStateRef.current((prev) => ({ ...prev, playbackQuality: recommendedQuality }));
-          } else {
+            if (speed !== null && recommendedQuality) {
+              setAutoVideoUrl(sourcesIndexByResolution[recommendedQuality?.toString()]?.src ?? sources[0].src);
+              updateStateRef.current((prev) => ({ ...prev, playbackQuality: recommendedQuality }));
+            } else {
+              const sourceQuality = sources[0].src;
+              setAutoVideoUrl(sourceQuality);
+              updateStateRef.current((prev) => ({ ...prev, playbackQuality: Number(sourceQuality) }));
+            }
+          } catch (error) {
+            if (cancelled) return;
+            // Fallback to first source on error
             const sourceQuality = sources[0].src;
             setAutoVideoUrl(sourceQuality);
             updateStateRef.current((prev) => ({ ...prev, playbackQuality: Number(sourceQuality) }));
@@ -122,7 +130,8 @@ const usePlayerProxy = ({
           'fragParsingError',
         ];
         const isRecoverable =
-          skipErrors.includes(data?.type) || (data?.type === 'mediaError' && recoverableDetails.includes(data?.details));
+          skipErrors.includes(data?.type) ||
+          (data?.type === 'mediaError' && recoverableDetails.includes(data?.details));
         if (!isRecoverable) {
           updateState((prev) => ({
             ...prev,

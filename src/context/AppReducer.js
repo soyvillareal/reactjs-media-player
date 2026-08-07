@@ -9,17 +9,14 @@ function reducer(state, action) {
     if ('type' in action) {
       const { type, payload } = action;
 
-      for (let i = 0; i < actionTypes.length; i++) {
-        const key = actionTypes[i];
-        if (actionTypes.includes(type) === false) {
-          throw new Error(`Invalid type "${type}" in action payload!`);
-        } else if (key === type) {
-          return {
-            ...state,
-            [key]: payload,
-          };
-        }
+      if (actionTypes.includes(type) === false) {
+        throw new Error(`Invalid type "${type}" in action payload!`);
       }
+
+      return {
+        ...state,
+        [type]: payload,
+      };
     } else if (typeof action === 'object') {
       if (Object.keys(action).length === 0) {
         throw new Error('Reducer action object is empty!');

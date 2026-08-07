@@ -70,12 +70,6 @@ const useVolume = ({ prevented, muted, videoRef, src, updateState }) => {
   );
 
   React.useEffect(() => {
-    return () => {
-      videoRef.current = null;
-    };
-  }, [videoRef]);
-
-  React.useEffect(() => {
     if (!videoRef.current) {
       return () => {};
     }

@@ -4,14 +4,14 @@ export const measureNetworkSpeedGeneratedFile = async () => {
   const testUrl = 'https://files.testfile.org/PDF/10MB-TESTFILE.ORG.pdf';
   const fileSizeInBits = 10 * 1024 * 1024 * 8;
 
-  const startTime = performance.now();
   try {
     const speedInMbpsInCookie = getCookie('internet_speed');
     if (speedInMbpsInCookie) {
       return parseFloat(speedInMbpsInCookie);
     }
 
-    const response = await fetch(testUrl, { mode: 'no-cors' });
+    const startTime = performance.now();
+    const response = await fetch(testUrl);
     await response.blob();
     const endTime = performance.now();
 
@@ -51,12 +51,24 @@ export const getRecommendedVideoQuality = (speed, sources) => {
     return selectedQuality;
   }
 
-  for (let i = videoQualityOptions.length - 1; i >= 0; i--) {
+  // Fallback: find the nearest available quality at or below the recommended
+  if (selectedQuality) {
+    for (let i = videoQualityOptions.length - 1; i >= 0; i--) {
+      const option = videoQualityOptions[i];
+      if (option.quality <= selectedQuality && sources.includes(option.quality)) {
+        return option.quality;
+      }
+    }
+  }
+
+  // Last resort: return the lowest available quality from sources
+  for (let i = 0; i < videoQualityOptions.length; i++) {
     const option = videoQualityOptions[i];
     if (sources.includes(option.quality)) {
       return option.quality;
     }
   }
 
-  return undefined;
+  // If nothing in videoQualityOptions matches, return first source
+  return sources.length > 0 ? sources[0] : undefined;
 };

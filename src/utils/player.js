@@ -90,6 +90,7 @@ export const getSDK = enableStubOn(function getSDK(
     const onLoaded = (sdk) => {
       // When loaded, resolve all pending request promises
       requests[url].forEach((request) => request.resolve(sdk));
+      requests[url] = null; // Release references after resolving
     };
     if (sdkReady) {
       const previousOnReady = window[sdkReady];

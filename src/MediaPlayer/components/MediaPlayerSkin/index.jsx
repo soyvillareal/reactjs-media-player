@@ -59,6 +59,12 @@ const MediaPlayerSkin = React.forwardRef((props, ref) => {
   const playerSkinRef = React.useRef(null);
   const playerRef = React.useRef(null);
 
+  // Use a stable callback that reads the ref at call time,
+  // not at render time, so keyboard shortcuts work after PlayerSkin mounts.
+  const handleKeyDown = React.useCallback((e) => {
+    playerSkinRef.current?.handleKeyDown?.(e);
+  }, []);
+
   const preventedMemorized = React.useMemo(
     () => props.prevented || (props.playing && props.muted),
     [props.muted, props.playing, props.prevented],
@@ -110,13 +116,33 @@ const MediaPlayerSkin = React.forwardRef((props, ref) => {
     },
   });
 
+  const playerConfig = React.useMemo(
+    () => ({
+      attributes: props.config.attributes,
+      tracks: props.config.tracks,
+      forceVideo: props.config.forceVideo,
+      forceHLS: props.config.forceHLS,
+      dashVersion: props.config.dashVersion,
+      forceDASH: props.config.forceDASH,
+      forceFLV: props.config.forceFLV,
+      flvVersion: props.config.flvVersion,
+      forceLoad: props.config.forceLoad,
+      forceDisableHls: props.config.forceDisableHls,
+      hlsOptions: props.config.hlsOptions,
+      hlsVersion: props.config.hlsVersion,
+      forceSafariHLS: props.config.forceSafariHLS,
+      loopOnEnded: props.config.loopOnEnded,
+    }),
+    [props.config],
+  );
+
   return (
     <MediaPlayerWrapper
       tabIndex={0}
       role="application"
       dir="ltr"
       ref={playerRef}
-      onKeyDown={playerSkinRef.current?.handleKeyDown}
+      onKeyDown={handleKeyDown}
       style={playerStyles}
     >
       <StyledPlayerContainer>
@@ -137,22 +163,7 @@ const MediaPlayerSkin = React.forwardRef((props, ref) => {
             width={props.width}
             height={props.height}
             playing={playerState.playing}
-            config={{
-              attributes: props.config.attributes,
-              tracks: props.config.tracks,
-              forceVideo: props.config.forceVideo,
-              forceHLS: props.config.forceHLS,
-              dashVersion: props.config.dashVersion,
-              forceDASH: props.config.forceDASH,
-              forceFLV: props.config.forceFLV,
-              flvVersion: props.config.flvVersion,
-              forceLoad: props.config.forceLoad,
-              forceDisableHls: props.config.forceDisableHls,
-              hlsOptions: props.config.hlsOptions,
-              hlsVersion: props.config.hlsVersion,
-              forceSafariHLS: props.config.forceSafariHLS,
-              loopOnEnded: props.config.loopOnEnded,
-            }}
+            config={playerConfig}
             disableDeferredLoading={props.disableDeferredLoading}
             progressFrequency={props.progressFrequency}
             {...playerProxy}

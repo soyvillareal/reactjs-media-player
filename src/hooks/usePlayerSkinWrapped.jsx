@@ -1,6 +1,7 @@
 import React from 'react';
 
 import useAppDispatch from './context/useAppDispatch';
+import useAppSelector from './context/useAppSelector';
 import InLoopIcon from '../PlayerSkin/Commons/Icons/InLoopIcon';
 import PipIcon from '../PlayerSkin/Commons/Icons/PipIcon';
 import { buildIconProps } from '../PlayerSkin/PlayerSkin.constants';
@@ -16,6 +17,7 @@ const usePlayerSkinWrapped = ({
   onLoopClick,
 }) => {
   const dispatch = useAppDispatch();
+  const { i18n } = useAppSelector();
 
   const [cMPosition, setCMPosition] = React.useState({ x: 0, y: 0 });
 
@@ -59,7 +61,7 @@ const usePlayerSkinWrapped = ({
     const menuItems = [
       {
         action: () => onLoopClick(),
-        label: 'En Bucle',
+        label: i18n.loop,
         icon: <InLoopIcon {...iconProps} />,
         isCheckable: true,
         defaultChecked: loop,
@@ -68,7 +70,7 @@ const usePlayerSkinWrapped = ({
     if (pictureInPictureEnabled) {
       menuItems.push({
         action: () => (pip ? exitPictureInPicture() : requestPictureInPicture()),
-        label: 'Pantalla en pantalla',
+        label: i18n.pictureInPicture,
         icon: <PipIcon {...iconProps} />,
         isCheckable: false,
         defaultChecked: false,
@@ -76,7 +78,7 @@ const usePlayerSkinWrapped = ({
     }
 
     return menuItems;
-  }, [iconProps, pictureInPictureEnabled, pip, loop, requestPictureInPicture, exitPictureInPicture, onLoopClick]);
+  }, [iconProps, i18n, pictureInPictureEnabled, pip, loop, requestPictureInPicture, exitPictureInPicture, onLoopClick]);
 
   return {
     handleContextMenu,

@@ -36,8 +36,8 @@ describe('getRecommendedVideoQuality', () => {
     expect(getRecommendedVideoQuality(5.0, [480, 720])).toBe(720);
   });
 
-  test('returns highest available quality when speed is too low but quality not in sources', () => {
-    expect(getRecommendedVideoQuality(0.1, [480, 720, 1080])).toBe(1080);
+  test('returns lowest available quality when speed is too low for any tier', () => {
+    expect(getRecommendedVideoQuality(0.1, [480, 720, 1080])).toBe(480);
   });
 
   test('returns undefined when sources array is empty', () => {

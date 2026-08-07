@@ -34,7 +34,9 @@ export default class PlayerCore extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    this.removeListeners(this.prevPlayer, prevProps.url);
+    if (this.prevPlayer && this.prevPlayer !== this.player) {
+      this.removeListeners(this.prevPlayer);
+    }
     this.addListeners(this.player);
     if (this.props.url !== prevProps.url && isMediaStream(this.props.url) === false) {
       this.player.srcObject = null;
@@ -77,7 +79,7 @@ export default class PlayerCore extends React.Component {
     }
   }
 
-  removeListeners(player, url) {
+  removeListeners(player) {
     if (!player) {
       return;
     }
@@ -93,10 +95,6 @@ export default class PlayerCore extends React.Component {
     player.removeEventListener('enterpictureinpicture', this.onEnablePIP);
     player.removeEventListener('leavepictureinpicture', this.onDisablePIP);
     player.removeEventListener('webkitpresentationmodechanged', this.onPresentationModeChange);
-    if (!this.shouldUseHLS(url)) {
-      // onReady is handled by hls.js
-      player.removeEventListener('canplay', this.onReady);
-    }
   }
 
   // Proxy methods to prevent listener leaks
@@ -190,9 +188,14 @@ export default class PlayerCore extends React.Component {
       this.flv.unload();
     }
 
+    // Increment load sequence to ignore stale SDK load callbacks
+    this.loadSequence = (this.loadSequence || 0) + 1;
+    const currentSequence = this.loadSequence;
+
     if (this.shouldUseHLS(url)) {
       getSDK(HLS_SDK_URL.replace('VERSION', hlsVersion), HLS_GLOBAL)
         .then((Hls) => {
+          if (currentSequence !== this.loadSequence) return; // Stale load
           this.hls = new Hls(hlsOptions);
           this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
             this.props.onReady();
@@ -208,9 +211,10 @@ export default class PlayerCore extends React.Component {
     } else if (this.shouldUseDASH(url)) {
       getSDK(DASH_SDK_URL.replace('VERSION', dashVersion), DASH_GLOBAL)
         .then((dashjs) => {
+          if (currentSequence !== this.loadSequence) return; // Stale load
           this.dash = dashjs.MediaPlayer().create();
           this.dash.initialize(this.player, url, this.props.playing);
-          this.dash.on('error', function (e) {
+          this.dash.on('error', (e) => {
             this.props.onError(e, null, this.dash, dashjs);
           });
           if (parseInt(dashVersion) < 3) {
@@ -227,6 +231,7 @@ export default class PlayerCore extends React.Component {
     } else if (this.shouldUseFLV(url)) {
       getSDK(FLV_SDK_URL.replace('VERSION', flvVersion), FLV_GLOBAL)
         .then((flvjs) => {
+          if (currentSequence !== this.loadSequence) return; // Stale load
           this.flv = flvjs.createPlayer({ type: 'flv', url });
           this.flv.attachMediaElement(this.player);
           this.flv.on(flvjs.Events.ERROR, (e, data) => {
@@ -288,7 +293,10 @@ export default class PlayerCore extends React.Component {
 
   enablePIP() {
     if (this.player.requestPictureInPicture && document.pictureInPictureElement !== this.player) {
-      this.player.requestPictureInPicture();
+      const promise = this.player.requestPictureInPicture();
+      if (promise && promise.catch) {
+        promise.catch((err) => this.props.onError(err));
+      }
     } else if (
       supportsWebKitPresentationMode(this.player) &&
       this.player.webkitPresentationMode !== 'picture-in-picture'

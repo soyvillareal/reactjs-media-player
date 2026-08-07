@@ -31,7 +31,7 @@ describe('usePlayerSkinWrapped', () => {
   test('contextMenuItems has at least one item (loop)', () => {
     const { result } = renderHook(() => usePlayerSkinWrapped(defaults), { wrapper });
     expect(result.current.contextMenuItems.length).toBeGreaterThanOrEqual(1);
-    expect(result.current.contextMenuItems[0].label).toBe('En Bucle');
+    expect(result.current.contextMenuItems[0].label).toBe('Loop');
   });
 
   test('contextMenuItems includes PiP item when pictureInPictureEnabled is true', () => {
@@ -40,7 +40,7 @@ describe('usePlayerSkinWrapped', () => {
       { wrapper },
     );
     expect(result.current.contextMenuItems.length).toBe(2);
-    expect(result.current.contextMenuItems[1].label).toBe('Pantalla en pantalla');
+    expect(result.current.contextMenuItems[1].label).toBe('Picture in picture');
   });
 
   test('loop item defaultChecked matches loop prop', () => {

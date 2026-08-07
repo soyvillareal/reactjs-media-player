@@ -136,10 +136,23 @@ const PlayerSkin = React.forwardRef(
         playerElement.addEventListener('keydown', handleKeyDown);
 
         return () => {
+          clearTimeout(timerRef.current);
           playerElement.removeEventListener('keydown', handleKeyDown);
         };
       }
     }, [muted, volume, playerRef]);
+
+    const handleChangeSettings = React.useCallback(
+      ({ quality, speed }) => {
+        if (speed) {
+          changePlaybackRate(Number(speed.value ?? 1));
+        }
+        if (quality) {
+          changePlayBackQuality(Number(quality.value) ?? 0);
+        }
+      },
+      [changePlaybackRate, changePlayBackQuality],
+    );
 
     return (
       <StyledPlayerSkin
@@ -218,14 +231,7 @@ const PlayerSkin = React.forwardRef(
                   playbackRate={playbackRate}
                   fullscreen={fullscreen}
                   fullHDQualityBreak={fullHDQualityBreak}
-                  changeSettings={({ quality, speed }) => {
-                    if (speed) {
-                      changePlaybackRate(Number(speed.value ?? 1));
-                    }
-                    if (quality) {
-                      changePlayBackQuality(Number(quality.value) ?? 0);
-                    }
-                  }}
+                  changeSettings={handleChangeSettings}
                 />
                 <FullscreenButton
                   fullscreen={fullscreen}

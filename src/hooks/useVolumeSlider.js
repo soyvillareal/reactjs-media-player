@@ -101,16 +101,15 @@ const useVolumeSlider = ({ fullscreen, value, onChange }) => {
       document.addEventListener('touchmove', onMouseMove);
       document.addEventListener('touchcancel', onMouseUp);
       document.addEventListener('touchend', onMouseUp);
-      return () => {
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-
-        document.removeEventListener('touchmove', onMouseMove);
-        document.removeEventListener('touchcancel', onMouseUp);
-        document.removeEventListener('touchend', onMouseUp);
-      };
     }
-    return () => {};
+    return () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+
+      document.removeEventListener('touchmove', onMouseMove);
+      document.removeEventListener('touchcancel', onMouseUp);
+      document.removeEventListener('touchend', onMouseUp);
+    };
   }, [state.volumeSliding, onMouseMove, onMouseUp]);
 
   return {

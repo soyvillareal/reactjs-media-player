@@ -9,7 +9,10 @@ const useFullscreen = ({ updateState, videoRef, playerRef }) => {
       return;
     }
     if (playerElement.requestFullscreen) {
-      playerElement.requestFullscreen();
+      const promise = playerElement.requestFullscreen();
+      if (promise && promise.catch) {
+        promise.catch(() => {});
+      }
     } else if (playerElement.msRequestFullscreen) {
       // Compatibilidad con IE11
       playerElement.msRequestFullscreen();

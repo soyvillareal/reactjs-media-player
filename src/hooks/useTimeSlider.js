@@ -125,16 +125,15 @@ const useTimeSlider = ({ timelensRef, currentTime, duration, onChange, onSeeking
       document.addEventListener('touchmove', onMouseMove);
       document.addEventListener('touchcancel', onMouseUp);
       document.addEventListener('touchend', onMouseUp);
-      return () => {
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-
-        document.removeEventListener('touchmove', onMouseMove);
-        document.removeEventListener('touchcancel', onMouseUp);
-        document.removeEventListener('touchend', onMouseUp);
-      };
     }
-    return () => {};
+    return () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+
+      document.removeEventListener('touchmove', onMouseMove);
+      document.removeEventListener('touchcancel', onMouseUp);
+      document.removeEventListener('touchend', onMouseUp);
+    };
   }, [timeSliderSliding, onMouseMove, onMouseUp]);
 
   const onSliderMouseOver = React.useCallback(

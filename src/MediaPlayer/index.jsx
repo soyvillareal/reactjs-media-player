@@ -53,7 +53,7 @@ export const createMediaPlayer = (player) => {
       return !isEqual(this.props, nextProps) || !isEqual(this.state, nextState);
     }
 
-    componentDidUpdate(prevProps) {}
+    componentDidUpdate() {}
 
     getDuration = () => {
       if (!this.player) return null;
