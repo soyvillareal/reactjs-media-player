@@ -8,6 +8,7 @@ yarn-error.log
 /coverage
 /es6
 .idea/
+.kiro
 .vscode/
 /examples/local
 /examples/react/public/uploads

@@ -48,6 +48,12 @@
       "sourceType": "github",
       "skillPath": ".claude/skills/react-expert/SKILL.md",
       "computedHash": "91dcdc833291c5f6583fd479325c848af3db21287579ef9b15cfb74f05409015"
+    },
+    "typescript-expert": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/typescript-expert/SKILL.md",
+      "computedHash": "b4623290742a2319a2c6aca09c62438a796c399f65aac6facd7273f9b144c8e7"
     }
   }
 }
