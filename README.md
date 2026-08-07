@@ -31,7 +31,7 @@ import React from 'react';
 import ReactJSMediaPlayer from 'reactjs-media-player';
 
 // Render a HLS video player
-<ReactJSMediaPlayer url="https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8" />;
+<ReactJSMediaPlayer url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" />;
 ```
 
 If your build system supports `import()` statements, use `reactjs-media-player/lazy` to lazy load the appropriate player for the `url` you pass in. This adds several `ReactJS Media Player` chunks to your output, but reduces your main bundle size.
@@ -41,7 +41,7 @@ import React from 'react';
 import ReactJSMediaPlayerLazy from 'reactjs-media-player/lazy';
 
 // Lazy load the YouTube player
-<ReactJSMediaPlayerLazy url="https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8" />;
+<ReactJSMediaPlayerLazy url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" />;
 ```
 
 Demo page: [`https://soyvillareal.github.io/reactjs-media-player`](https://soyvillareal.github.io/reactjs-media-player)
@@ -158,7 +158,7 @@ class ResponsivePlayer extends Component {
       <div className="player-wrapper">
         <ReactJSMediaPlayer
           className="reactjs-media-player"
-          url="https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
+          url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
           width="100%"
           height="100%"
         />
@@ -195,7 +195,7 @@ If you aren’t using React, you can still render a player using the standalone 
 <script src="https://cdn.jsdelivr.net/npm/reactjs-media-player/dist/ReactJSMediaPlayer.standalone.js"></script>
 <script>
   const container = document.getElementById('container');
-  const url = 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8';
+  const url = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
 
   renderReactJSMediaPlayer(container, { url, playing: true });
 

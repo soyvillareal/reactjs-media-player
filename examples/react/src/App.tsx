@@ -15,7 +15,7 @@ const App = () => {
   const ref = React.useRef<any>();
 
   const [state, setState] = React.useState<IState>({
-    urlFile: 'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
+    urlFile: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
     spriteVTTFile: null,
     pip: false,
     playing: false,
@@ -293,10 +293,7 @@ const App = () => {
                   'https://test-videos.co.uk/vids/bigbuckbunny/webm/vp8/360/Big_Buck_Bunny_360_10s_1MB.webm',
                   'webm',
                 )}
-                {renderLoadButton(
-                  'https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8',
-                  'HLS (m3u8)',
-                )}
+                {renderLoadButton('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', 'HLS (m3u8)')}
                 <br />
                 {renderLoadButton(
                   'https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps_640x360_800k.mpd',
