@@ -14,6 +14,7 @@ export default class PlayerProxy extends React.Component {
   progressTimeout = 0;
   durationCheckTimeout = 0;
   seekOnPlayTimeout = 0;
+  volumeTimeout = 0;
   prevPlayed = 0;
   prevLoaded = 0;
   player = null;
@@ -36,6 +37,7 @@ export default class PlayerProxy extends React.Component {
     clearTimeout(this.progressTimeout);
     clearTimeout(this.durationCheckTimeout);
     clearTimeout(this.seekOnPlayTimeout);
+    clearTimeout(this.volumeTimeout);
     if (this.isReady && this.props.stopOnUnmount) {
       this.player.stop();
 
@@ -93,7 +95,12 @@ export default class PlayerProxy extends React.Component {
         this.player.unmute();
         if (volume !== null) {
           // Set volume next tick to fix a bug with DailyMotion
-          setTimeout(() => this.player.setVolume(volume));
+          clearTimeout(this.volumeTimeout);
+          this.volumeTimeout = setTimeout(() => {
+            if (this.mounted && this.player) {
+              this.player.setVolume(volume);
+            }
+          });
         }
       }
     }
@@ -177,7 +184,10 @@ export default class PlayerProxy extends React.Component {
         }
       }
     }
-    this.progressTimeout = setTimeout(this.progress, this.props.progressFrequency || this.props.progressInterval);
+    // Only schedule next tick if still playing to save CPU when paused
+    if (this.isPlaying && this.mounted) {
+      this.progressTimeout = setTimeout(this.progress, this.props.progressFrequency || this.props.progressInterval);
+    }
   };
 
   seekTo(amount, type, keepPlaying) {
@@ -248,6 +258,9 @@ export default class PlayerProxy extends React.Component {
       this.seekOnPlay = null;
     }
     this.handleDurationCheck();
+    // Restart progress loop since it stops when paused
+    clearTimeout(this.progressTimeout);
+    this.progress();
   };
 
   handlePause = (e) => {
@@ -260,19 +273,23 @@ export default class PlayerProxy extends React.Component {
   handleEnded = () => {
     const { activePlayer, loop, onEnded } = this.props;
 
-    if (
-      activePlayer.defaultProps !== undefined &&
-      activePlayer.defaultProps.config !== undefined &&
-      activePlayer.defaultProps.config.loopOnEnded &&
-      loop === true
-    ) {
-      this.seekTo(0);
-    }
-    if (loop === false) {
-      this.isPlaying = false;
-      if (onEnded) {
-        onEnded();
+    if (loop === true) {
+      // If loopOnEnded is configured, use seekTo for seamless looping
+      if (
+        activePlayer.defaultProps !== undefined &&
+        activePlayer.defaultProps.config !== undefined &&
+        activePlayer.defaultProps.config.loopOnEnded
+      ) {
+        this.seekTo(0);
       }
+      // With loop=true, the <video loop> attribute handles native looping.
+      // Don't set isPlaying=false or call onEnded when looping.
+      return;
+    }
+    // Not looping — mark as stopped and notify consumer
+    this.isPlaying = false;
+    if (onEnded) {
+      onEnded();
     }
   };
 

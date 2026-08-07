@@ -106,6 +106,25 @@ export const createMediaPlayer = (player) => {
       return omit(this.props, SUPPORTED_PROPS);
     });
 
+    getPlayerConfig = memoize((config) => {
+      return {
+        attributes: config.attributes,
+        tracks: config.tracks,
+        forceVideo: config.forceVideo,
+        forceHLS: config.forceHLS,
+        dashVersion: config.dashVersion,
+        forceDASH: config.forceDASH,
+        forceFLV: config.forceFLV,
+        flvVersion: config.flvVersion,
+        forceLoad: config.forceLoad,
+        forceDisableHls: config.forceDisableHls,
+        hlsOptions: config.hlsOptions,
+        hlsVersion: config.hlsVersion,
+        forceSafariHLS: config.forceSafariHLS,
+        loopOnEnded: config.loopOnEnded,
+      };
+    });
+
     getSourceProps = () => {
       if ('sources' in this.props && this.props.sources !== undefined) {
         return {
@@ -138,6 +157,7 @@ export const createMediaPlayer = (player) => {
       }
 
       const config = this.getConfig(url, sources, player.key);
+      const playerConfig = this.getPlayerConfig(config);
       const sourceProps = this.getSourceProps();
       const urlProp = this.getUrlProp();
 
@@ -160,22 +180,7 @@ export const createMediaPlayer = (player) => {
           width={this.props.width}
           height={this.props.height}
           playing={this.props.playing}
-          config={{
-            attributes: config.attributes,
-            tracks: config.tracks,
-            forceVideo: config.forceVideo,
-            forceHLS: config.forceHLS,
-            dashVersion: config.dashVersion,
-            forceDASH: config.forceDASH,
-            forceFLV: config.forceFLV,
-            flvVersion: config.flvVersion,
-            forceLoad: config.forceLoad,
-            forceDisableHls: config.forceDisableHls,
-            hlsOptions: config.hlsOptions,
-            hlsVersion: config.hlsVersion,
-            forceSafariHLS: config.forceSafariHLS,
-            loopOnEnded: config.loopOnEnded,
-          }}
+          config={playerConfig}
           prevented={this.props.prevented}
           waiting={this.props.waiting}
           onBuffer={this.props.onBuffer}

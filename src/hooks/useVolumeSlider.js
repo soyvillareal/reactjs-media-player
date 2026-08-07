@@ -75,6 +75,8 @@ const useVolumeSlider = ({ fullscreen, value, onChange }) => {
     [onChange, fullscreen, dispatch],
   );
 
+  const rafRef = React.useRef(null);
+
   const onMouseMove = React.useCallback(
     (e) => {
       e.preventDefault();
@@ -82,13 +84,20 @@ const useVolumeSlider = ({ fullscreen, value, onChange }) => {
         return;
       }
 
-      const percentage = getVolume({
-        clientX: e.clientX,
-        sliderRef,
-        isFullcreen: fullscreen,
+      // Throttle via requestAnimationFrame to reduce re-renders during drag
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+      rafRef.current = requestAnimationFrame(() => {
+        const percentage = getVolume({
+          clientX,
+          sliderRef,
+          isFullcreen: fullscreen,
+        });
+        onChange(percentage);
+        rafRef.current = null;
       });
-
-      onChange(percentage);
     },
     [isDragging, fullscreen, onChange],
   );
@@ -109,6 +118,11 @@ const useVolumeSlider = ({ fullscreen, value, onChange }) => {
       document.removeEventListener('touchmove', onMouseMove);
       document.removeEventListener('touchcancel', onMouseUp);
       document.removeEventListener('touchend', onMouseUp);
+
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
     };
   }, [state.volumeSliding, onMouseMove, onMouseUp]);
 

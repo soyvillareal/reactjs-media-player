@@ -108,7 +108,6 @@ const PlayerSkin = React.forwardRef(
         videoRef,
         playerRef,
       });
-      playerRef.current?.focus();
     }, [videoRef, playerRef, dispatch]);
 
     React.useImperativeHandle(
@@ -330,9 +329,11 @@ export default React.memo(
     p.playerRef === n.playerRef &&
     p.live === n.live &&
     p.hasResource === n.hasResource &&
+    p.hasAudio === n.hasAudio &&
     p.loading === n.loading &&
     p.prevented === n.prevented &&
     p.paused === n.paused &&
+    p.ended === n.ended &&
     p.seeking === n.seeking &&
     p.waiting === n.waiting &&
     p.duration === n.duration &&
@@ -351,6 +352,7 @@ export default React.memo(
     p.poster === n.poster &&
     p.onPauseClick === n.onPauseClick &&
     p.onPlayClick === n.onPlayClick &&
+    p.onTogglePlay === n.onTogglePlay &&
     p.changeCurrentTime === n.changeCurrentTime &&
     p.onMutedClick === n.onMutedClick &&
     p.changeVolume === n.changeVolume &&

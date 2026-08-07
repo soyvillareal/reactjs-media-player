@@ -94,25 +94,37 @@ const useTimeSlider = ({ timelensRef, currentTime, duration, onChange, onSeeking
     [onChange, duration, timeSliderRect, dispatch, onSeeking, timelensRef],
   );
 
+  const rafRef = React.useRef(null);
+
   const onMouseMove = React.useCallback(
     (e) => {
       e.preventDefault();
-      const value = getValue(
-        e,
-        {
-          left: timeSliderRect.left,
-          width: timeSliderRect.width,
-        },
-        duration,
-      );
-
-      setTimeSliderState((prev) => ({
-        ...prev,
-        value,
-      }));
-      if (timelensRef.current) {
-        timelensRef.current.handleTimelens(e);
+      // Throttle via requestAnimationFrame to avoid 60fps setState calls
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
       }
+      // Capture coordinates synchronously (event object may be pooled/reused)
+      const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+      const pageX = e.pageX ?? e.touches?.[0]?.pageX ?? 0;
+      rafRef.current = requestAnimationFrame(() => {
+        const value = getValue(
+          { clientX },
+          {
+            left: timeSliderRect.left,
+            width: timeSliderRect.width,
+          },
+          duration,
+        );
+
+        setTimeSliderState((prev) => ({
+          ...prev,
+          value,
+        }));
+        if (timelensRef.current) {
+          timelensRef.current.handleTimelens({ clientX, pageX });
+        }
+        rafRef.current = null;
+      });
     },
     [duration, timeSliderRect, timelensRef],
   );
@@ -133,6 +145,11 @@ const useTimeSlider = ({ timelensRef, currentTime, duration, onChange, onSeeking
       document.removeEventListener('touchmove', onMouseMove);
       document.removeEventListener('touchcancel', onMouseUp);
       document.removeEventListener('touchend', onMouseUp);
+
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
     };
   }, [timeSliderSliding, onMouseMove, onMouseUp]);
 
@@ -177,17 +194,24 @@ const useTimeSlider = ({ timelensRef, currentTime, duration, onChange, onSeeking
     [duration, timeSliderRect.left, timeSliderRect.width, timelensRef],
   );
 
-  const onResize = React.useCallback((e) => {
-    e.preventDefault();
-    if (!sliderRef || !sliderRef.current) {
-      return;
+  const resizeTimerRef = React.useRef(null);
+  const onResize = React.useCallback(() => {
+    // Debounce resize to avoid layout thrashing
+    if (resizeTimerRef.current) {
+      clearTimeout(resizeTimerRef.current);
     }
-    const rect = sliderRef.current.getBoundingClientRect();
-    setTimeSliderRect((prev) => ({
-      ...prev,
-      left: rect.left,
-      width: rect.width,
-    }));
+    resizeTimerRef.current = setTimeout(() => {
+      if (!sliderRef || !sliderRef.current) {
+        return;
+      }
+      const rect = sliderRef.current.getBoundingClientRect();
+      setTimeSliderRect((prev) => ({
+        ...prev,
+        left: rect.left,
+        width: rect.width,
+      }));
+      resizeTimerRef.current = null;
+    }, 100);
   }, []);
 
   const onMouseEnter = React.useCallback(
@@ -211,6 +235,9 @@ const useTimeSlider = ({ timelensRef, currentTime, duration, onChange, onSeeking
       window.addEventListener('resize', onResize);
       return () => {
         window.removeEventListener('resize', onResize);
+        if (resizeTimerRef.current) {
+          clearTimeout(resizeTimerRef.current);
+        }
       };
     }
   }, [onResize]);

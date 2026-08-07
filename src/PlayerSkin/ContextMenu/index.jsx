@@ -17,11 +17,10 @@ const ContextMenu = React.forwardRef(({ fullscreen, position, menuItems }, ref) 
   const dispatch = useAppDispatch();
 
   const menuRef = React.useRef();
-  const [menuChecked, setMenuChecked] = React.useState({});
 
   const portalRool = React.useMemo(() => {
-    if (fullscreen) {
-      return state.playerRef?.current;
+    if (fullscreen && state.playerRef?.current) {
+      return state.playerRef.current;
     }
     return document.body;
   }, [fullscreen, state.playerRef]);
@@ -66,13 +65,12 @@ const ContextMenu = React.forwardRef(({ fullscreen, position, menuItems }, ref) 
               type: 'contextMenuVisible',
               payload: false,
             });
-            setMenuChecked((prev) => ({ ...prev, [i]: !prev[i] }));
           }}
           isFullscreen={fullscreen}
         >
           {item.icon}
           <StyledContextMenuLabel>{item.label}</StyledContextMenuLabel>
-          {item.isCheckable && (menuChecked[i] || item.defaultChecked) && (
+          {item.isCheckable && item.defaultChecked && (
             <StyledContextMenuChecked>
               <CheckedIcon width={24} height={24} />
             </StyledContextMenuChecked>

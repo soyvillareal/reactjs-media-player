@@ -20,13 +20,18 @@ const usePlayerSkinWrapper = ({
   const { i18n } = useAppSelector();
   const videoRef = React.useRef(null);
   const playerSkinRef = React.useRef(null);
-  const { requestFullscreen, exitFullscreen, requestToggleFullscreen } = useFullscreen({
-    updateState: ({ fullscreen }) => {
+  const updateFullscreenState = React.useCallback(
+    ({ fullscreen }) => {
       updateState((prev) => ({
         ...prev,
         isFullScreen: fullscreen,
       }));
     },
+    [updateState],
+  );
+
+  const { requestFullscreen, exitFullscreen, requestToggleFullscreen } = useFullscreen({
+    updateState: updateFullscreenState,
     videoRef,
     playerRef,
   });
@@ -84,31 +89,41 @@ const usePlayerSkinWrapper = ({
     [player, changeCurrentTime],
   );
 
+  // Use refs for frequently-changing callbacks to keep memorizedProps stable
+  const onMutedClickRef = React.useRef(onMutedClick);
+  onMutedClickRef.current = onMutedClick;
+  const changeCurrentTimeRef = React.useRef(changeCurrentTime);
+  changeCurrentTimeRef.current = changeCurrentTime;
+  const playerRef2 = React.useRef(player);
+  playerRef2.current = player;
+
   const memorizedProps = React.useMemo(() => {
     return {
-      onPlayClick: () => player && updateState((prev) => ({ ...prev, playing: true })),
-      onPauseClick: () => player && updateState((prev) => ({ ...prev, playing: false })),
+      onPlayClick: () => playerRef2.current && updateState((prev) => ({ ...prev, playing: true })),
+      onPauseClick: () => playerRef2.current && updateState((prev) => ({ ...prev, playing: false })),
       onTogglePlay: () =>
-        player &&
+        playerRef2.current &&
         updateState((prev) => ({
           ...prev,
           playing: !prev.playing,
         })),
-      changePlaybackRate: (rate) => player && updateState((prev) => ({ ...prev, playbackRate: rate })),
+      changePlaybackRate: (rate) => playerRef2.current && updateState((prev) => ({ ...prev, playbackRate: rate })),
       changePlayBackQuality: (quality) => {
-        if (player) {
+        if (playerRef2.current) {
           updateState((prev) => ({ ...prev, playbackQuality: quality }));
         }
       },
-      requestPictureInPicture: () => player && updateState((prev) => ({ ...prev, isPIP: true })),
-      exitPictureInPicture: () => player && updateState((prev) => ({ ...prev, isPIP: false })),
-      onSeeking: (seeking) => player && updateState((prev) => ({ ...prev, seeking: seeking })),
-      onMutedClick: () => player && onMutedClick(),
-      onLoopClick: () => player && updateState((prev) => ({ ...prev, loop: !prev.loop })),
+      requestPictureInPicture: () => playerRef2.current && updateState((prev) => ({ ...prev, isPIP: true })),
+      exitPictureInPicture: () => playerRef2.current && updateState((prev) => ({ ...prev, isPIP: false })),
+      onSeeking: (seeking) => playerRef2.current && updateState((prev) => ({ ...prev, seeking: seeking })),
+      onMutedClick: () => playerRef2.current && onMutedClickRef.current(),
+      onLoopClick: () => playerRef2.current && updateState((prev) => ({ ...prev, loop: !prev.loop })),
       onPreventedClick: () => updateState((prev) => ({ ...prev, isMuted: false, volume: 1 })),
-      changeCurrentTime,
+      changeCurrentTime: (time) => changeCurrentTimeRef.current(time),
     };
-  }, [player, changeCurrentTime, onMutedClick, updateState]);
+    // updateState is stable (React setState), refs handle the rest
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateState]);
 
   const handleKeyDown = React.useCallback(
     (e) => {

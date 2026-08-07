@@ -7,6 +7,9 @@
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
  */
 export const getCookie = (name) => {
+  if (typeof document === 'undefined') {
+    return null;
+  }
   const nameEQ = `rmp_${name}=`;
   const ca = document.cookie.split(';');
   for (let i = 0; i < ca.length; i++) {
@@ -33,6 +36,9 @@ export const getCookie = (name) => {
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
  */
 export const setCookie = (name, value, days) => {
+  if (typeof document === 'undefined') {
+    return;
+  }
   let expires = '';
   if (days) {
     const date = new Date();
@@ -50,5 +56,8 @@ export const setCookie = (name, value, days) => {
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#Example_4_Reset_the_previous_cookie
  */
 export function deleteCookie(name) {
+  if (typeof document === 'undefined') {
+    return;
+  }
   document.cookie = `rmp_${encodeURIComponent(name)}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
 }

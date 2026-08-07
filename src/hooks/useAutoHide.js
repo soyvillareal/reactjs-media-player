@@ -99,8 +99,7 @@ const useAutoHide = ({ hasResource, loading, prevented, paused, ended, waiting, 
     } else if (!paused) {
       showControls();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused, ended]);
+  }, [paused, ended, showControls, dispatch]);
 
   // Cleanup timer on unmount to prevent firing after component is gone
   React.useEffect(() => {

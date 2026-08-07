@@ -1,8 +1,9 @@
 import { getCookie, setCookie } from '../utils/cookie';
 
 export const measureNetworkSpeedGeneratedFile = async () => {
-  const testUrl = 'https://files.testfile.org/PDF/10MB-TESTFILE.ORG.pdf';
-  const fileSizeInBits = 10 * 1024 * 1024 * 8;
+  // Use a small file (~200KB) for fast measurement with minimal data usage
+  const testUrl = 'https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js';
+  const fileSizeInBits = 200 * 1024 * 8; // approximate size in bits
 
   try {
     const speedInMbpsInCookie = getCookie('internet_speed');
@@ -10,18 +11,29 @@ export const measureNetworkSpeedGeneratedFile = async () => {
       return parseFloat(speedInMbpsInCookie);
     }
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
     const startTime = performance.now();
-    const response = await fetch(testUrl);
-    await response.blob();
+    const response = await fetch(testUrl, {
+      signal: controller.signal,
+      cache: 'no-store',
+    });
+    const blob = await response.blob();
+    clearTimeout(timeoutId);
     const endTime = performance.now();
 
-    const durationInSeconds = (endTime - startTime) / 1000; // En segundos
-    const speedInMbps = fileSizeInBits / (durationInSeconds * 1024 * 1024); // Mbps
+    // Use actual downloaded size if available
+    const actualSizeInBits = blob.size * 8 || fileSizeInBits;
+    const durationInSeconds = (endTime - startTime) / 1000;
+    const speedInMbps = actualSizeInBits / (durationInSeconds * 1024 * 1024);
     setCookie('internet_speed', speedInMbps.toString(), 7);
 
     return speedInMbps;
   } catch (error) {
-    console.error('An error occurred while measuring the network speed: ', error);
+    if (error.name !== 'AbortError') {
+      console.error('An error occurred while measuring the network speed: ', error);
+    }
     return null;
   }
 };

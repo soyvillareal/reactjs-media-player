@@ -36,8 +36,12 @@ export default class PlayerCore extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.prevPlayer && this.prevPlayer !== this.player) {
       this.removeListeners(this.prevPlayer);
+      this.listenersAttached = false;
     }
-    this.addListeners(this.player);
+    // Only add listeners if not already attached to prevent duplicate registrations
+    if (!this.listenersAttached) {
+      this.addListeners(this.player);
+    }
     if (this.props.url !== prevProps.url && isMediaStream(this.props.url) === false) {
       this.player.srcObject = null;
     }
@@ -46,6 +50,7 @@ export default class PlayerCore extends React.Component {
   componentWillUnmount() {
     this.player.removeAttribute('src');
     this.removeListeners(this.player);
+    this.listenersAttached = false;
   }
 
   addListeners(player) {
@@ -54,6 +59,10 @@ export default class PlayerCore extends React.Component {
     if (!player) {
       return;
     }
+
+    // Remove existing listeners first to prevent duplicates
+    this.removeListeners(player);
+    this.listenersAttached = true;
 
     player.addEventListener('play', this.onPlay);
     player.addEventListener('waiting', this.onBuffer);

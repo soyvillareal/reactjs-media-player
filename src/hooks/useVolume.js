@@ -89,10 +89,13 @@ const useVolume = ({ prevented, muted, videoRef, src, updateState }) => {
     }
     const el = videoRef.current;
     if (el) {
-      el.muted = false;
-      el.volume = 1;
+      // Only unmute if the player is not in a muted state.
+      // Do NOT reset volume to 1 — preserve the user's current volume setting.
+      if (!muted) {
+        el.muted = false;
+      }
     }
-  }, [src, videoRef]);
+  }, [src, videoRef, muted]);
 
   return {
     onMutedClick,

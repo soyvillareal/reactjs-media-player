@@ -199,6 +199,7 @@ describe('PlayerProxy Component', () => {
       instance.player = mockPlayerCoreInstance;
       instance.isReady = true;
       instance.mounted = true;
+      instance.isPlaying = true;
 
       const spySetTimeout = jest.spyOn(global, 'setTimeout');
 

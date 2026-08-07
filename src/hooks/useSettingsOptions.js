@@ -43,8 +43,13 @@ const useSettingsOptions = ({ live, fullHDQualityBreak, qualities, playbackRate,
   const handleButtonClick = React.useCallback(
     (e) => {
       e.stopPropagation();
-      dispatch((state) => ({ type: 'menuVisible', payload: !state.subMenuVisible ? !state.menuVisible : false }));
-      dispatch({ type: 'subMenuVisible', payload: false });
+      dispatch((state) => {
+        const shouldClose = !state.subMenuVisible ? !state.menuVisible : false;
+        return {
+          menuVisible: shouldClose,
+          subMenuVisible: false,
+        };
+      });
       setSettings((state) => ({
         ...initialSettings,
         generalMenu: !state.speed && !state.quality ? !state.generalMenu : false,

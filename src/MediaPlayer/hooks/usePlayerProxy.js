@@ -34,12 +34,66 @@ const usePlayerProxy = ({
   const updateStateRef = React.useRef(updateState);
   updateStateRef.current = updateState;
 
-  const resolutions = sources.map((source) => source.resolution);
+  // Keep all consumer callbacks in refs so the proxy object stays stable
+  const callbacksRef = React.useRef({
+    onBuffer,
+    onBufferEnd,
+    onDisablePIP,
+    onDuration,
+    onEnablePIP,
+    onEnded,
+    onError,
+    onPause,
+    onPlay,
+    onPlayBackQualityChange,
+    onPlayBackRateChange,
+    onProgress,
+    onReady,
+    onSeek,
+    onStart,
+    onLoaded,
+    onMount,
+  });
+  callbacksRef.current = {
+    onBuffer,
+    onBufferEnd,
+    onDisablePIP,
+    onDuration,
+    onEnablePIP,
+    onEnded,
+    onError,
+    onPause,
+    onPlay,
+    onPlayBackQualityChange,
+    onPlayBackRateChange,
+    onProgress,
+    onReady,
+    onSeek,
+    onStart,
+    onLoaded,
+    onMount,
+  };
 
-  if (sources.length > 0 && resolutions.includes(fullHDQualityBreak) === false) {
-    console.error(
-      `ReactJSMediaPlayer: Invalid fullHDQualityBreak value "${fullHDQualityBreak}". Accepted resolutions are: ${resolutions.join(', ')}. Falling back to highest available.`,
-    );
+  // Keep reactive values in refs for the proxy closures
+  const preventedRef = React.useRef(prevented);
+  preventedRef.current = prevented;
+  const seekingRef = React.useRef(playerState.seeking);
+  seekingRef.current = playerState.seeking;
+
+  // Only log the fullHDQualityBreak warning once per set of sources
+  const warnedRef = React.useRef(false);
+  React.useEffect(() => {
+    warnedRef.current = false;
+  }, [sources, fullHDQualityBreak]);
+
+  if (sources.length > 0 && !warnedRef.current) {
+    const resolutions = sources.map((source) => source.resolution);
+    if (resolutions.includes(fullHDQualityBreak) === false) {
+      console.error(
+        `ReactJSMediaPlayer: Invalid fullHDQualityBreak value "${fullHDQualityBreak}". Accepted resolutions are: ${resolutions.join(', ')}. Falling back to highest available.`,
+      );
+      warnedRef.current = true;
+    }
   }
 
   React.useEffect(() => {
@@ -91,36 +145,47 @@ const usePlayerProxy = ({
     return url;
   }, [url, sources, playerState.playbackQuality, autoVideoUrl]);
 
+  // Build proxy object once — uses refs to always read latest callback/state
   const proxyMemorized = React.useMemo(
     () => ({
-      onBuffer: onBuffer,
-      onBufferEnd: onBufferEnd,
-      onDisablePIP: (e) => {
-        if (onDisablePIP) {
-          onDisablePIP(e);
+      onBuffer: (...args) => {
+        if (callbacksRef.current.onBuffer) {
+          callbacksRef.current.onBuffer(...args);
         }
-        updateState((prev) => ({ ...prev, isPIP: false }));
+      },
+      onBufferEnd: (...args) => {
+        if (callbacksRef.current.onBufferEnd) {
+          callbacksRef.current.onBufferEnd(...args);
+        }
+      },
+      onDisablePIP: (e) => {
+        if (callbacksRef.current.onDisablePIP) {
+          callbacksRef.current.onDisablePIP(e);
+        }
+        updateStateRef.current((prev) => ({ ...prev, isPIP: false }));
       },
       onDuration: (duration) => {
-        if (onDuration) {
-          onDuration(duration);
+        if (callbacksRef.current.onDuration) {
+          callbacksRef.current.onDuration(duration);
         }
-        updateState((prev) => ({ ...prev, duration: duration }));
+        updateStateRef.current((prev) => ({ ...prev, duration: duration }));
       },
       onEnablePIP: (e) => {
-        if (onEnablePIP) {
-          onEnablePIP(e);
+        if (callbacksRef.current.onEnablePIP) {
+          callbacksRef.current.onEnablePIP(e);
         }
-        updateState((prev) => ({ ...prev, isPIP: true }));
+        updateStateRef.current((prev) => ({ ...prev, isPIP: true }));
       },
       onEnded: (e) => {
-        if (onEnded) {
-          onEnded(e);
+        if (callbacksRef.current.onEnded) {
+          callbacksRef.current.onEnded(e);
         }
-        updateState((prev) => ({ ...prev, isEnded: true }));
+        updateStateRef.current((prev) => ({ ...prev, isEnded: true }));
       },
       onError: (e, data, hls, HLS) => {
-        onError(e, data, hls, HLS);
+        if (callbacksRef.current.onError) {
+          callbacksRef.current.onError(e, data, hls, HLS);
+        }
         // Skip recoverable errors that hls.js handles internally
         const skipErrors = ['networkError'];
         const recoverableDetails = [
@@ -133,7 +198,7 @@ const usePlayerProxy = ({
           skipErrors.includes(data?.type) ||
           (data?.type === 'mediaError' && recoverableDetails.includes(data?.details));
         if (!isRecoverable) {
-          updateState((prev) => ({
+          updateStateRef.current((prev) => ({
             ...prev,
             kernelError: data
               ? {
@@ -147,64 +212,73 @@ const usePlayerProxy = ({
         }
       },
       onPause: (e) => {
-        if (onPause) {
-          onPause(e);
+        if (callbacksRef.current.onPause) {
+          callbacksRef.current.onPause(e);
         }
-        updateState((prev) => ({ ...prev, playing: false }));
+        updateStateRef.current((prev) => ({ ...prev, playing: false }));
       },
       onPlay: (e) => {
-        if (onPlay) {
-          onPlay(e);
+        if (callbacksRef.current.onPlay) {
+          callbacksRef.current.onPlay(e);
         }
-        updateState((prev) => ({
+        updateStateRef.current((prev) => ({
           ...prev,
           playing: true,
           isEnded: false,
-          hasAudio: prevented ? true : (e?.hasAudio ?? false),
+          hasAudio: preventedRef.current ? true : (e?.hasAudio ?? false),
         }));
       },
       onPlayBackQualityChange: (quality) => {
-        if (onPlayBackQualityChange) {
-          onPlayBackQualityChange(quality);
+        if (callbacksRef.current.onPlayBackQualityChange) {
+          callbacksRef.current.onPlayBackQualityChange(quality);
         }
-        updateState((prev) => ({ ...prev, playbackQuality: quality }));
+        updateStateRef.current((prev) => ({ ...prev, playbackQuality: quality }));
       },
       onPlayBackRateChange: (rate) => {
-        if (onPlayBackRateChange) {
-          onPlayBackRateChange(rate);
+        if (callbacksRef.current.onPlayBackRateChange) {
+          callbacksRef.current.onPlayBackRateChange(rate);
         }
-        updateState((prev) => ({ ...prev, playbackRate: rate }));
+        updateStateRef.current((prev) => ({ ...prev, playbackRate: rate }));
       },
       onProgress: (state) => {
-        if (onProgress) {
-          onProgress(state);
+        if (callbacksRef.current.onProgress) {
+          callbacksRef.current.onProgress(state);
         }
-        if (!playerState.seeking) {
-          updateState((prev) => ({ ...prev, played: state.playedSeconds, loaded: state.loaded }));
+        if (!seekingRef.current) {
+          updateStateRef.current((prev) => ({ ...prev, played: state.playedSeconds, loaded: state.loaded }));
         }
       },
       onReady: (e) => {
-        if (onReady) {
-          onReady(e);
+        if (callbacksRef.current.onReady) {
+          callbacksRef.current.onReady(e);
         }
-        updateState((prev) => ({ ...prev, isLoading: false }));
+        updateStateRef.current((prev) => ({ ...prev, isLoading: false }));
       },
       onSeek: (time) => {
-        if (onSeek) {
-          onSeek(time);
+        if (callbacksRef.current.onSeek) {
+          callbacksRef.current.onSeek(time);
         }
-        updateState((prev) => ({ ...prev, seek: time }));
+        updateStateRef.current((prev) => ({ ...prev, seek: time }));
       },
       onStart: () => {
-        if (onStart) {
-          onStart();
+        if (callbacksRef.current.onStart) {
+          callbacksRef.current.onStart();
         }
       },
-      onLoaded: onLoaded,
-      onMount: onMount,
+      onLoaded: (...args) => {
+        if (callbacksRef.current.onLoaded) {
+          callbacksRef.current.onLoaded(...args);
+        }
+      },
+      onMount: (...args) => {
+        if (callbacksRef.current.onMount) {
+          callbacksRef.current.onMount(...args);
+        }
+      },
     }),
+    // Empty deps — stable forever, reads current values from refs
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [playerState.seeking, prevented],
+    [],
   );
 
   return {

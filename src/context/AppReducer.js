@@ -13,6 +13,11 @@ function reducer(state, action) {
         throw new Error(`Invalid type "${type}" in action payload!`);
       }
 
+      // Bail out if value hasn't changed to prevent unnecessary re-renders
+      if (state[type] === payload) {
+        return state;
+      }
+
       return {
         ...state,
         [type]: payload,
@@ -22,6 +27,7 @@ function reducer(state, action) {
         throw new Error('Reducer action object is empty!');
       }
 
+      let hasChanged = false;
       let newState = {
         ...state,
       };
@@ -32,13 +38,17 @@ function reducer(state, action) {
           throw new Error(`Invalid type "${key}" in action object!`);
         }
 
-        newState = {
-          ...newState,
-          [key]: value,
-        };
+        if (state[key] !== value) {
+          hasChanged = true;
+          newState = {
+            ...newState,
+            [key]: value,
+          };
+        }
       }
 
-      return newState;
+      // Return same reference if nothing changed
+      return hasChanged ? newState : state;
     }
 
     return state;
