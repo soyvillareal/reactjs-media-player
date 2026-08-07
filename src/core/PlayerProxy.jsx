@@ -13,6 +13,7 @@ export default class PlayerProxy extends React.Component {
 
   progressTimeout = 0;
   durationCheckTimeout = 0;
+  seekOnPlayTimeout = 0;
   prevPlayed = 0;
   prevLoaded = 0;
   player = null;
@@ -34,6 +35,7 @@ export default class PlayerProxy extends React.Component {
   componentWillUnmount() {
     clearTimeout(this.progressTimeout);
     clearTimeout(this.durationCheckTimeout);
+    clearTimeout(this.seekOnPlayTimeout);
     if (this.isReady && this.props.stopOnUnmount) {
       this.player.stop();
 
@@ -141,7 +143,7 @@ export default class PlayerProxy extends React.Component {
   }
 
   progress = () => {
-    if (this.props.url && this.player && this.isReady) {
+    if (this.props.url && this.player && this.isReady && this.mounted) {
       const playedSeconds = this.getCurrentTime() || 0;
       const loadedSeconds = this.getSecondsLoaded();
       const duration = this.getDuration();
@@ -181,7 +183,7 @@ export default class PlayerProxy extends React.Component {
     if (this.isReady === false) {
       if (amount !== 0) {
         this.seekOnPlay = amount;
-        setTimeout(() => {
+        this.seekOnPlayTimeout = setTimeout(() => {
           this.seekOnPlay = null;
         }, SEEK_ON_PLAY_EXPIRY);
       }

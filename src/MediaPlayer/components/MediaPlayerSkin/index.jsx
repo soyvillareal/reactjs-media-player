@@ -215,6 +215,7 @@ export default React.memo(
     p.onPlayBackQualityChange === n.onPlayBackQualityChange &&
     p.onProgress === n.onProgress &&
     p.onEnablePIP === n.onEnablePIP &&
-    (p.onDisablePIP === n.onDisablePIP) & (p.onLoaded === n.onLoaded) &&
+    p.onDisablePIP === n.onDisablePIP &&
+    p.onLoaded === n.onLoaded &&
     p.onMount === n.onMount,
 );

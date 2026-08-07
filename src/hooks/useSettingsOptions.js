@@ -112,13 +112,7 @@ const useSettingsOptions = ({ live, fullHDQualityBreak, qualities, playbackRate,
 
   React.useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        (!dropdownRef.current.contains(event.target) ||
-          !Array.from(dropdownRef.current?.querySelectorAll('*'))
-            .map((el) => el.contains(event.target))
-            .includes(true))
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         dispatch({
           menuVisible: false,
           subMenuVisible: false,

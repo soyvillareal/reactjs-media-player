@@ -37,15 +37,19 @@ const usePlayerProxy = ({
   const resolutions = sources.map((source) => source.resolution);
 
   if (sources.length > 0 && resolutions.includes(fullHDQualityBreak) === false) {
-    throw new Error(`Invalid values in fullHDQualityBreak. Accepted resolutions are: ${resolutions.join(', ')}`);
+    console.error(
+      `ReactJSMediaPlayer: Invalid fullHDQualityBreak value "${fullHDQualityBreak}". Accepted resolutions are: ${resolutions.join(', ')}. Falling back to highest available.`,
+    );
   }
 
   React.useEffect(() => {
+    let cancelled = false;
     (async () => {
       if (sources && sources.length > 0) {
         const sourcesIndexByResolution = indexBy(sources, 'resolution');
         if (autoVideoUrl === null && sourcesIndexByResolution) {
           const speed = await measureNetworkSpeedGeneratedFile();
+          if (cancelled) return;
           const speeds = Object.keys(sourcesIndexByResolution).map(Number);
           const recommendedQuality = getRecommendedVideoQuality(speed || 0, speeds);
 
@@ -60,6 +64,9 @@ const usePlayerProxy = ({
         }
       }
     })();
+    return () => {
+      cancelled = true;
+    };
   }, [sources, autoVideoUrl]);
 
   const videoUrl = React.useMemo(() => {
@@ -106,8 +113,17 @@ const usePlayerProxy = ({
       },
       onError: (e, data, hls, HLS) => {
         onError(e, data, hls, HLS);
-        const skipErrors = ['networkError']; // Put here the errors that you want to skip
-        if (skipErrors.includes(data?.type) === false) {
+        // Skip recoverable errors that hls.js handles internally
+        const skipErrors = ['networkError'];
+        const recoverableDetails = [
+          'bufferStalledError',
+          'bufferNudgeOnStall',
+          'bufferAppendError',
+          'fragParsingError',
+        ];
+        const isRecoverable =
+          skipErrors.includes(data?.type) || (data?.type === 'mediaError' && recoverableDetails.includes(data?.details));
+        if (!isRecoverable) {
           updateState((prev) => ({
             ...prev,
             kernelError: data

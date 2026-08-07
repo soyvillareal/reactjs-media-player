@@ -191,45 +191,51 @@ export default class PlayerCore extends React.Component {
     }
 
     if (this.shouldUseHLS(url)) {
-      getSDK(HLS_SDK_URL.replace('VERSION', hlsVersion), HLS_GLOBAL).then((Hls) => {
-        this.hls = new Hls(hlsOptions);
-        this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          this.props.onReady();
-        });
-        this.hls.on(Hls.Events.ERROR, (event, data) => {
-          this.props.onError(event, data, this.hls, Hls);
-        });
-        this.hls.loadSource(url);
-        this.hls.attachMedia(this.player);
-        this.props.onLoaded();
-      });
-    } else if (this.shouldUseDASH(url)) {
-      getSDK(DASH_SDK_URL.replace('VERSION', dashVersion), DASH_GLOBAL).then((dashjs) => {
-        this.dash = dashjs.MediaPlayer().create();
-        this.dash.initialize(this.player, url, this.props.playing);
-        this.dash.on('error', function (e) {
-          this.props.onError(e, null, this.dash, dashjs);
-        });
-        if (parseInt(dashVersion) < 3) {
-          // This function does not exist in dash.js version 3.0.0 and later
-          this.dash.getDebug().setLogToBrowserConsole(false);
-        } else {
-          this.dash.updateSettings({
-            debug: { logLevel: dashjs.LogLevel.LOG_LEVEL_NONE },
+      getSDK(HLS_SDK_URL.replace('VERSION', hlsVersion), HLS_GLOBAL)
+        .then((Hls) => {
+          this.hls = new Hls(hlsOptions);
+          this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            this.props.onReady();
           });
-        }
-        this.props.onLoaded();
-      });
+          this.hls.on(Hls.Events.ERROR, (event, data) => {
+            this.props.onError(event, data, this.hls, Hls);
+          });
+          this.hls.loadSource(url);
+          this.hls.attachMedia(this.player);
+          this.props.onLoaded();
+        })
+        .catch((err) => this.props.onError(err));
+    } else if (this.shouldUseDASH(url)) {
+      getSDK(DASH_SDK_URL.replace('VERSION', dashVersion), DASH_GLOBAL)
+        .then((dashjs) => {
+          this.dash = dashjs.MediaPlayer().create();
+          this.dash.initialize(this.player, url, this.props.playing);
+          this.dash.on('error', function (e) {
+            this.props.onError(e, null, this.dash, dashjs);
+          });
+          if (parseInt(dashVersion) < 3) {
+            // This function does not exist in dash.js version 3.0.0 and later
+            this.dash.getDebug().setLogToBrowserConsole(false);
+          } else {
+            this.dash.updateSettings({
+              debug: { logLevel: dashjs.LogLevel.LOG_LEVEL_NONE },
+            });
+          }
+          this.props.onLoaded();
+        })
+        .catch((err) => this.props.onError(err));
     } else if (this.shouldUseFLV(url)) {
-      getSDK(FLV_SDK_URL.replace('VERSION', flvVersion), FLV_GLOBAL).then((flvjs) => {
-        this.flv = flvjs.createPlayer({ type: 'flv', url });
-        this.flv.attachMediaElement(this.player);
-        this.flv.on(flvjs.Events.ERROR, (e, data) => {
-          this.props.onError(e, data, this.flv, flvjs);
-        });
-        this.flv.load();
-        this.props.onLoaded();
-      });
+      getSDK(FLV_SDK_URL.replace('VERSION', flvVersion), FLV_GLOBAL)
+        .then((flvjs) => {
+          this.flv = flvjs.createPlayer({ type: 'flv', url });
+          this.flv.attachMediaElement(this.player);
+          this.flv.on(flvjs.Events.ERROR, (e, data) => {
+            this.props.onError(e, data, this.flv, flvjs);
+          });
+          this.flv.load();
+          this.props.onLoaded();
+        })
+        .catch((err) => this.props.onError(err));
     } else if (isMediaStream(url)) {
       try {
         this.player.srcObject = url;

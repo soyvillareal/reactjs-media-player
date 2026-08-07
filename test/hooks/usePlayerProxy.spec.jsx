@@ -198,18 +198,73 @@ describe('usePlayerProxy', () => {
   test('onError sets kernelError in state for non-skipped errors', () => {
     const updateState = jest.fn();
     const { result } = renderHook(() => usePlayerProxy({ ...baseProps, updateState }), { wrapper });
-    const errorData = { type: 'mediaError', error: { message: 'decode error' } };
+    const errorData = { type: 'otherError', error: { message: 'decode error' } };
     act(() => result.current.onError('event', errorData, null, null));
     const fn = updateState.mock.calls[0][0];
     const newState = fn({});
     expect(newState.kernelError).toBeDefined();
-    expect(newState.kernelError.type).toBe('mediaError');
+    expect(newState.kernelError.type).toBe('otherError');
   });
 
   test('onError skips state update for networkError type', () => {
     const updateState = jest.fn();
     const { result } = renderHook(() => usePlayerProxy({ ...baseProps, updateState }), { wrapper });
     act(() => result.current.onError('event', { type: 'networkError' }, null, null));
+    expect(updateState).not.toHaveBeenCalled();
+  });
+
+  test('onError skips state update for recoverable mediaError bufferStalledError', () => {
+    const updateState = jest.fn();
+    const { result } = renderHook(() => usePlayerProxy({ ...baseProps, updateState }), { wrapper });
+    act(() => result.current.onError('event', { type: 'mediaError', details: 'bufferStalledError' }, null, null));
+    expect(updateState).not.toHaveBeenCalled();
+  });
+
+  test('onError skips state update for recoverable mediaError bufferNudgeOnStall', () => {
+    const updateState = jest.fn();
+    const { result } = renderHook(() => usePlayerProxy({ ...baseProps, updateState }), { wrapper });
+    act(() => result.current.onError('event', { type: 'mediaError', details: 'bufferNudgeOnStall' }, null, null));
+    expect(updateState).not.toHaveBeenCalled();
+  });
+
+  test('onError skips state update for recoverable mediaError bufferAppendError', () => {
+    const updateState = jest.fn();
+    const { result } = renderHook(() => usePlayerProxy({ ...baseProps, updateState }), { wrapper });
+    act(() => result.current.onError('event', { type: 'mediaError', details: 'bufferAppendError' }, null, null));
+    expect(updateState).not.toHaveBeenCalled();
+  });
+
+  test('onError skips state update for recoverable mediaError fragParsingError', () => {
+    const updateState = jest.fn();
+    const { result } = renderHook(() => usePlayerProxy({ ...baseProps, updateState }), { wrapper });
+    act(() => result.current.onError('event', { type: 'mediaError', details: 'fragParsingError' }, null, null));
+    expect(updateState).not.toHaveBeenCalled();
+  });
+
+  test('onError shows error for non-recoverable mediaError', () => {
+    const updateState = jest.fn();
+    const { result } = renderHook(() => usePlayerProxy({ ...baseProps, updateState }), { wrapper });
+    act(() =>
+      result.current.onError(
+        'event',
+        { type: 'mediaError', details: 'manifestIncompatibleCodecsError', error: { message: 'codec not supported' } },
+        null,
+        null,
+      ),
+    );
+    expect(updateState).toHaveBeenCalled();
+    const fn = updateState.mock.calls[0][0];
+    const newState = fn({});
+    expect(newState.kernelError).toBeDefined();
+    expect(newState.kernelError.type).toBe('mediaError');
+  });
+
+  test('onError always calls onError prop callback even for skipped errors', () => {
+    const onError = jest.fn();
+    const updateState = jest.fn();
+    const { result } = renderHook(() => usePlayerProxy({ ...baseProps, onError, updateState }), { wrapper });
+    act(() => result.current.onError('event', { type: 'mediaError', details: 'bufferStalledError' }, null, null));
+    expect(onError).toHaveBeenCalledWith('event', { type: 'mediaError', details: 'bufferStalledError' }, null, null);
     expect(updateState).not.toHaveBeenCalled();
   });
 
@@ -222,7 +277,7 @@ describe('usePlayerProxy', () => {
     expect(newState.kernelError).toBeNull();
   });
 
-  test('throws when fullHDQualityBreak is not in sources resolutions', () => {
+  test('logs error when fullHDQualityBreak is not in sources resolutions', () => {
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const props = {
       ...baseProps,
@@ -233,7 +288,10 @@ describe('usePlayerProxy', () => {
         prevented: false,
       },
     };
-    expect(() => renderHook(() => usePlayerProxy(props), { wrapper })).toThrow();
+    renderHook(() => usePlayerProxy(props), { wrapper });
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Invalid fullHDQualityBreak'),
+    );
     consoleSpy.mockRestore();
   });
 

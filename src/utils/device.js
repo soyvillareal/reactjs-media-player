@@ -7,6 +7,10 @@ let isDesktop = false;
  */
 
 function callback() {
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+    return;
+  }
+
   const userAgent = window.navigator.userAgent.toLowerCase();
 
   const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;

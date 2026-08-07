@@ -88,7 +88,6 @@ const useAutoHide = ({ hasResource, loading, prevented, paused, ended, waiting, 
     menuVisible,
     subMenuVisible,
     controlsHovering,
-    timerControls,
     kernelMsg,
     dispatch,
   ]);
@@ -101,7 +100,7 @@ const useAutoHide = ({ hasResource, loading, prevented, paused, ended, waiting, 
       showControls();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused, ended, timerControls]);
+  }, [paused, ended]);
 
   return {
     showControls,

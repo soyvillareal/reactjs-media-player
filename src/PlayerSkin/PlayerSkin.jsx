@@ -139,7 +139,7 @@ const PlayerSkin = React.forwardRef(
           playerElement.removeEventListener('keydown', handleKeyDown);
         };
       }
-    }, [muted, volume, playerRef, timerRef]);
+    }, [muted, volume, playerRef]);
 
     return (
       <StyledPlayerSkin

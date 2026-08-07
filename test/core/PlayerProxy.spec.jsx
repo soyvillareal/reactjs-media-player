@@ -140,6 +140,7 @@ describe('PlayerProxy Component', () => {
       const instance = new PlayerProxy(props);
       instance.player = mockPlayerCoreInstance;
       instance.isReady = true;
+      instance.mounted = true;
 
       act(() => {
         instance.progress();
@@ -157,6 +158,7 @@ describe('PlayerProxy Component', () => {
       const instance = new PlayerProxy(props);
       instance.player = mockPlayerCoreInstance;
       instance.isReady = false;
+      instance.mounted = true;
 
       const spyGetDuration = jest.spyOn(instance, 'getDuration').mockReturnValue(null);
 
@@ -181,6 +183,7 @@ describe('PlayerProxy Component', () => {
       const instance = new PlayerProxy(props);
       instance.player = mockPlayerCoreInstance;
       instance.isReady = true;
+      instance.mounted = true;
 
       act(() => {
         instance.progress();
@@ -195,6 +198,7 @@ describe('PlayerProxy Component', () => {
       const instance = new PlayerProxy(props);
       instance.player = mockPlayerCoreInstance;
       instance.isReady = true;
+      instance.mounted = true;
 
       const spySetTimeout = jest.spyOn(global, 'setTimeout');
 
@@ -219,6 +223,7 @@ describe('PlayerProxy Component', () => {
       const instance = new PlayerProxy(props);
       instance.player = mockPlayerCoreInstance;
       instance.isReady = true;
+      instance.mounted = true;
       instance.prevPlayed = playedSeconds;
       instance.prevLoaded = loadedSeconds;
 
@@ -232,6 +237,7 @@ describe('PlayerProxy Component', () => {
     it('should clear progress timeout on unmount', () => {
       const { unmount } = render(<PlayerProxy {...props} />);
       const instance = new PlayerProxy(props);
+      instance.mounted = true;
 
       const spyClearTimeout = jest.spyOn(global, 'clearTimeout');
 
@@ -255,6 +261,7 @@ describe('PlayerProxy Component', () => {
       const instance = new PlayerProxy(props);
       instance.player = mockPlayerCoreInstance;
       instance.isReady = true;
+      instance.mounted = true;
       instance.prevPlayed = playedSeconds;
       instance.prevLoaded = null;
 
