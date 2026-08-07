@@ -109,9 +109,12 @@ describe('useSettingsOptions', () => {
     expect(result.current.iconProps.width).toBe(54);
   });
 
-  test('changeSettings is called when values change', () => {
+  test('changeSettings is called when values change via user interaction', () => {
     const changeSettings = jest.fn();
-    renderHook(() => useSettingsOptions({ ...defaults, changeSettings }), { wrapper });
+    const { result } = renderHook(() => useSettingsOptions({ ...defaults, changeSettings }), { wrapper });
+    // Simulate user changing speed
+    const handler = result.current.handleMenuClick('speed');
+    act(() => handler('1.5'));
     expect(changeSettings).toHaveBeenCalled();
   });
 });

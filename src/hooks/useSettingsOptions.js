@@ -135,8 +135,22 @@ const useSettingsOptions = ({ live, fullHDQualityBreak, qualities, playbackRate,
 
   const iconProps = React.useMemo(() => buildIconProps(fullscreen), [fullscreen]);
 
+  // Track previous values to only call changeSettings when user makes a selection
+  const prevValuesRef = React.useRef(values);
   React.useEffect(() => {
-    changeSettings(values);
+    if (prevValuesRef.current !== values) {
+      const changed = {};
+      if (prevValuesRef.current.speed?.value !== values.speed?.value) {
+        changed.speed = values.speed;
+      }
+      if (prevValuesRef.current.quality?.value !== values.quality?.value) {
+        changed.quality = values.quality;
+      }
+      prevValuesRef.current = values;
+      if (changed.speed || changed.quality) {
+        changeSettings({ ...values, ...changed });
+      }
+    }
   }, [values, changeSettings]);
 
   return {

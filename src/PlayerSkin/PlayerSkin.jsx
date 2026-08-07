@@ -219,8 +219,12 @@ const PlayerSkin = React.forwardRef(
                   fullscreen={fullscreen}
                   fullHDQualityBreak={fullHDQualityBreak}
                   changeSettings={({ quality, speed }) => {
-                    changePlaybackRate(Number(speed?.value ?? 1));
-                    changePlayBackQuality(Number(quality?.value) ?? 0);
+                    if (speed) {
+                      changePlaybackRate(Number(speed.value ?? 1));
+                    }
+                    if (quality) {
+                      changePlayBackQuality(Number(quality.value) ?? 0);
+                    }
                   }}
                 />
                 <FullscreenButton

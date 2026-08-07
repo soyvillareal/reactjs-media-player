@@ -19,16 +19,42 @@ const MediaPlayerSkin = React.forwardRef((props, ref) => {
     volume: props.muted ? 0 : (props.volume ?? playerStateInitial.volume),
   });
 
-  React.useEffect(() => {
+  const [prevProps, setPrevProps] = React.useState({
+    pip: props.pip,
+    playbackRate: props.playbackRate,
+    loop: props.loop,
+    playing: props.playing,
+    muted: props.muted,
+    volume: props.volume,
+  });
+
+  // Sync external props to internal state synchronously (during render, not in useEffect)
+  if (
+    props.pip !== prevProps.pip ||
+    props.playbackRate !== prevProps.playbackRate ||
+    props.loop !== prevProps.loop ||
+    props.playing !== prevProps.playing ||
+    props.muted !== prevProps.muted ||
+    props.volume !== prevProps.volume
+  ) {
+    setPrevProps({
+      pip: props.pip,
+      playbackRate: props.playbackRate,
+      loop: props.loop,
+      playing: props.playing,
+      muted: props.muted,
+      volume: props.volume,
+    });
     setPlayerState((prevState) => ({
       ...prevState,
       isPIP: props.pip,
+      isMuted: props.muted,
       playbackRate: props.playbackRate,
       loop: props.loop,
       playing: props.playing,
       volume: props.muted ? 0 : (props.volume ?? playerStateInitial.volume),
     }));
-  }, [props.muted, props.volume, props.playing, props.pip, props.playbackRate, props.loop]);
+  }
 
   const playerSkinRef = React.useRef(null);
   const playerRef = React.useRef(null);
