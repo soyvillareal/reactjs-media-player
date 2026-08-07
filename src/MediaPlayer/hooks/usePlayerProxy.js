@@ -27,6 +27,13 @@ const usePlayerProxy = ({
 }) => {
   const [autoVideoUrl, setAutoVideoUrl] = React.useState(null);
 
+  // Stable ref for updateState to prevent infinite re-render loops.
+  // updateState (React setState) is stable by React's contract, but its identity
+  // can change when passed through intermediate components. Using a ref avoids
+  // re-triggering the network speed useEffect on every render.
+  const updateStateRef = React.useRef(updateState);
+  updateStateRef.current = updateState;
+
   const resolutions = sources.map((source) => source.resolution);
 
   if (sources.length > 0 && resolutions.includes(fullHDQualityBreak) === false) {
@@ -44,16 +51,16 @@ const usePlayerProxy = ({
 
           if (speed !== null && recommendedQuality) {
             setAutoVideoUrl(sourcesIndexByResolution[recommendedQuality?.toString()]?.src ?? sources[0].src);
-            updateState((prev) => ({ ...prev, playbackQuality: recommendedQuality }));
+            updateStateRef.current((prev) => ({ ...prev, playbackQuality: recommendedQuality }));
           } else {
             const sourceQuality = sources[0].src;
             setAutoVideoUrl(sourceQuality);
-            updateState((prev) => ({ ...prev, playbackQuality: Number(sourceQuality) }));
+            updateStateRef.current((prev) => ({ ...prev, playbackQuality: Number(sourceQuality) }));
           }
         }
       }
     })();
-  }, [sources, autoVideoUrl, updateState]);
+  }, [sources, autoVideoUrl]);
 
   const videoUrl = React.useMemo(() => {
     if (sources && sources.length > 0) {

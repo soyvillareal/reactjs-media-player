@@ -223,6 +223,7 @@ describe('usePlayerProxy', () => {
   });
 
   test('throws when fullHDQualityBreak is not in sources resolutions', () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const props = {
       ...baseProps,
       extraProps: {
@@ -233,9 +234,10 @@ describe('usePlayerProxy', () => {
       },
     };
     expect(() => renderHook(() => usePlayerProxy(props), { wrapper })).toThrow();
+    consoleSpy.mockRestore();
   });
 
-  test('uses sources for videoUrl when playbackQuality is set', () => {
+  test('uses sources for videoUrl when playbackQuality is set', async () => {
     const { result } = renderHook(
       () =>
         usePlayerProxy({
@@ -245,10 +247,13 @@ describe('usePlayerProxy', () => {
         }),
       { wrapper },
     );
+    await act(async () => {
+      await Promise.resolve();
+    });
     expect(result.current.videoUrl).toBe('video_720.m3u8');
   });
 
-  test('falls back to sources[0] when playbackQuality not in sources', () => {
+  test('falls back to sources[0] when playbackQuality not in sources', async () => {
     const { result } = renderHook(
       () =>
         usePlayerProxy({
@@ -258,6 +263,9 @@ describe('usePlayerProxy', () => {
         }),
       { wrapper },
     );
+    await act(async () => {
+      await Promise.resolve();
+    });
     expect(result.current.videoUrl).toBe('video_1080.m3u8');
   });
 });

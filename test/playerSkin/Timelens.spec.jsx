@@ -34,11 +34,15 @@ describe('Timelens', () => {
     sliderRef.current.getBoundingClientRect = () => ({ left: 0, top: 0, width: 500, height: 10 });
   });
 
-  test('renders without crashing', () => {
-    const { container } = render(
-      <Timelens spriteVTTFile="sprite.vtt" sliderRef={sliderRef} duration={100} fullscreen={false} />,
-      { wrapper },
-    );
+  test('renders without crashing', async () => {
+    let container;
+    await act(async () => {
+      const result = render(
+        <Timelens spriteVTTFile="sprite.vtt" sliderRef={sliderRef} duration={100} fullscreen={false} />,
+        { wrapper },
+      );
+      container = result.container;
+    });
     expect(container.firstChild).not.toBeNull();
   });
 

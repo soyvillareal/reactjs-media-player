@@ -4,7 +4,7 @@ module.exports = {
     '^.+\\.(js|jsx)$': 'esbuild-jest',
   },
   clearMocks: true,
-  collectCoverage: true,
+  collectCoverage: false,
   coverageDirectory: 'coverage',
   moduleFileExtensions: ['js', 'jsx'],
   testEnvironment: 'jest-environment-jsdom',

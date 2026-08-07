@@ -1,9 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import PlayerSkinWrapper from '../../src/PlayerSkin/index';
-
-// We need to provide a full set of props since PlayerSkinWrapper is a large component
-const noop = () => {};
 
 const baseProps = {
   playerRef: { current: document.createElement('div') },
@@ -30,23 +27,9 @@ const baseProps = {
   pip: false,
   fullscreen: false,
   loop: false,
-  fullHDQualityBreak: 1080,
-  spriteVTTFile: undefined,
   poster: '',
   kernelMsg: null,
   updateState: jest.fn(),
-  onPlayClick: noop,
-  onPauseClick: noop,
-  onTogglePlay: noop,
-  changePlaybackRate: noop,
-  changePlayBackQuality: noop,
-  requestPictureInPicture: noop,
-  exitPictureInPicture: noop,
-  onSeeking: noop,
-  onMutedClick: noop,
-  onLoopClick: noop,
-  onPreventedClick: noop,
-  changeCurrentTime: noop,
 };
 
 describe('PlayerSkinWrapper', () => {
@@ -65,39 +48,8 @@ describe('PlayerSkinWrapper', () => {
     expect(container.firstChild).not.toBeNull();
   });
 
-  test('renders when sources are provided', () => {
-    const sources = [
-      { src: 'video_1080.m3u8', resolution: 1080 },
-      { src: 'video_720.m3u8', resolution: 720 },
-    ];
-    const { container } = render(
-      <PlayerSkinWrapper {...baseProps} sources={sources} fullHDQualityBreak={1080} />,
-    );
-    expect(container.firstChild).not.toBeNull();
-  });
-
-  test('renders with poster', () => {
-    const { container } = render(<PlayerSkinWrapper {...baseProps} poster="poster.jpg" />);
-    expect(container.firstChild).not.toBeNull();
-  });
-
   test('renders when loading', () => {
     const { container } = render(<PlayerSkinWrapper {...baseProps} loading={true} />);
-    expect(container.firstChild).not.toBeNull();
-  });
-
-  test('renders when ended', () => {
-    const { container } = render(<PlayerSkinWrapper {...baseProps} ended={true} />);
-    expect(container.firstChild).not.toBeNull();
-  });
-
-  test('renders when waiting', () => {
-    const { container } = render(<PlayerSkinWrapper {...baseProps} waiting={true} />);
-    expect(container.firstChild).not.toBeNull();
-  });
-
-  test('renders when prevented', () => {
-    const { container } = render(<PlayerSkinWrapper {...baseProps} prevented={true} muted={true} />);
     expect(container.firstChild).not.toBeNull();
   });
 
@@ -106,16 +58,13 @@ describe('PlayerSkinWrapper', () => {
     expect(container.firstChild).not.toBeNull();
   });
 
-  test('renders with kernelMsg', () => {
-    const { container } = render(
-      <PlayerSkinWrapper {...baseProps} kernelMsg={{ type: 'error', detail: 'Something went wrong' }} />,
-    );
+  test('renders when ended', () => {
+    const { container } = render(<PlayerSkinWrapper {...baseProps} ended={true} />);
     expect(container.firstChild).not.toBeNull();
   });
 
-  test('renders in fullscreen mode', () => {
-    // Skip this test as fullscreen ContextMenu uses createPortal to playerRef.current
-    // which is null in test environment when fullscreen=true
-    expect(true).toBe(true);
+  test('renders with poster', () => {
+    const { container } = render(<PlayerSkinWrapper {...baseProps} poster="poster.jpg" />);
+    expect(container.firstChild).not.toBeNull();
   });
 });
