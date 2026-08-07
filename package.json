@@ -11,6 +11,8 @@
     "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix",
     "lint:ts": "eslint \"types/**/*.d.ts\"",
     "lint:ts:fix": "eslint \"types/**/*.d.ts\" --fix",
+    "format": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\"",
+    "format:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "test": "jest",
     "test:cov": "jest --coverage",
     "build": "npm run build:lib && npm run build:lazy && npm run build:dist && npm run build:es6",
