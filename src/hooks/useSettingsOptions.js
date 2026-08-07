@@ -40,15 +40,18 @@ const useSettingsOptions = ({ live, fullHDQualityBreak, qualities, playbackRate,
     }));
   }, [i18n, playbackRate]);
 
-  const handleButtonClick = React.useCallback((e) => {
-    e.stopPropagation();
-    dispatch((state) => ({ type: 'menuVisible', payload: !state.subMenuVisible ? !state.menuVisible : false }));
-    dispatch({ type: 'subMenuVisible', payload: false });
-    setSettings((state) => ({
-      ...initialSettings,
-      generalMenu: !state.speed && !state.quality ? !state.generalMenu : false,
-    }));
-  }, []);
+  const handleButtonClick = React.useCallback(
+    (e) => {
+      e.stopPropagation();
+      dispatch((state) => ({ type: 'menuVisible', payload: !state.subMenuVisible ? !state.menuVisible : false }));
+      dispatch({ type: 'subMenuVisible', payload: false });
+      setSettings((state) => ({
+        ...initialSettings,
+        generalMenu: !state.speed && !state.quality ? !state.generalMenu : false,
+      }));
+    },
+    [dispatch],
+  );
 
   const handleMenuClick = React.useCallback(
     (itemValue) => {
@@ -72,34 +75,40 @@ const useSettingsOptions = ({ live, fullHDQualityBreak, qualities, playbackRate,
         setSettings(initialSettings);
       };
     },
-    [fullHDQualityBreak, i18n],
+    [fullHDQualityBreak, i18n, dispatch],
   );
 
-  const handleMenuItemClick = React.useCallback((itemValue) => {
-    dispatch({
-      menuVisible: false,
-      subMenuVisible: true,
-    });
-    setSettings((prev) => ({
-      ...prev,
-      generalMenu: false,
-      [itemValue]: true,
-    }));
-  }, []);
-
-  const handleGoBack = React.useCallback((itemValue) => {
-    return () => {
+  const handleMenuItemClick = React.useCallback(
+    (itemValue) => {
       dispatch({
-        menuVisible: true,
-        subMenuVisible: false,
+        menuVisible: false,
+        subMenuVisible: true,
       });
       setSettings((prev) => ({
         ...prev,
-        generalMenu: true,
-        [itemValue]: false,
+        generalMenu: false,
+        [itemValue]: true,
       }));
-    };
-  }, []);
+    },
+    [dispatch],
+  );
+
+  const handleGoBack = React.useCallback(
+    (itemValue) => {
+      return () => {
+        dispatch({
+          menuVisible: true,
+          subMenuVisible: false,
+        });
+        setSettings((prev) => ({
+          ...prev,
+          generalMenu: true,
+          [itemValue]: false,
+        }));
+      };
+    },
+    [dispatch],
+  );
 
   React.useEffect(() => {
     const handleClickOutside = (event) => {
@@ -120,7 +129,7 @@ const useSettingsOptions = ({ live, fullHDQualityBreak, qualities, playbackRate,
 
     document.body.addEventListener('click', handleClickOutside);
     return () => document.body.removeEventListener('click', handleClickOutside);
-  }, []);
+  }, [dispatch]);
 
   const settingsOptions = React.useMemo(() => {
     return settingsOverlayFn({
@@ -134,7 +143,7 @@ const useSettingsOptions = ({ live, fullHDQualityBreak, qualities, playbackRate,
 
   React.useEffect(() => {
     changeSettings(values);
-  }, [values]);
+  }, [values, changeSettings]);
 
   return {
     dropdownRef,

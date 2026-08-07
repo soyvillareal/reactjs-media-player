@@ -50,6 +50,7 @@ const useAutoHide = ({ hasResource, loading, prevented, paused, ended, waiting, 
     subMenuVisible,
     controlsHovering,
     kernelMsg,
+    dispatch,
   ]);
 
   const hideControls = React.useCallback(() => {
@@ -89,6 +90,7 @@ const useAutoHide = ({ hasResource, loading, prevented, paused, ended, waiting, 
     controlsHovering,
     timerControls,
     kernelMsg,
+    dispatch,
   ]);
 
   React.useEffect(() => {
@@ -98,6 +100,7 @@ const useAutoHide = ({ hasResource, loading, prevented, paused, ended, waiting, 
     } else if (!paused) {
       showControls();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paused, ended, timerControls]);
 
   return {

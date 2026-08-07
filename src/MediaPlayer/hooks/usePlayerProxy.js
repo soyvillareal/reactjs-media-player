@@ -53,7 +53,7 @@ const usePlayerProxy = ({
         }
       }
     })();
-  }, [sources, autoVideoUrl]);
+  }, [sources, autoVideoUrl, updateState]);
 
   const videoUrl = React.useMemo(() => {
     if (sources && sources.length > 0) {
@@ -171,6 +171,7 @@ const usePlayerProxy = ({
       onLoaded: onLoaded,
       onMount: onMount,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [playerState.seeking, prevented],
   );
 

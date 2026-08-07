@@ -109,7 +109,7 @@ const PlayerSkin = React.forwardRef(
         playerRef,
       });
       playerRef.current?.focus();
-    }, [videoRef, playerRef]);
+    }, [videoRef, playerRef, dispatch]);
 
     React.useImperativeHandle(
       ref,
@@ -122,6 +122,7 @@ const PlayerSkin = React.forwardRef(
 
     React.useEffect(() => {
       if (playerRef.current) {
+        const playerElement = playerRef.current;
         const handleKeyDown = (e) => {
           const keyMapping = eventsKeyCodes[e.which || e.keyCode] || keyMappings[e.key];
           clearTimeout(timerRef.current);
@@ -132,10 +133,10 @@ const PlayerSkin = React.forwardRef(
             setShowBezel(false);
           }
         };
-        playerRef.current?.addEventListener('keydown', handleKeyDown);
+        playerElement.addEventListener('keydown', handleKeyDown);
 
         return () => {
-          playerRef.current?.removeEventListener('keydown', handleKeyDown);
+          playerElement.removeEventListener('keydown', handleKeyDown);
         };
       }
     }, [muted, volume, playerRef, timerRef]);

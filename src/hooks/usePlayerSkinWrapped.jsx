@@ -50,7 +50,7 @@ const usePlayerSkinWrapped = ({
         payload: true,
       });
     },
-    [contextMenuRef],
+    [contextMenuRef, dispatch],
   );
 
   const iconProps = React.useMemo(() => buildIconProps(fullscreen), [fullscreen]);
@@ -76,7 +76,7 @@ const usePlayerSkinWrapped = ({
     }
 
     return menuItems;
-  }, [iconProps, pictureInPictureEnabled, pip, loop, requestPictureInPicture, exitPictureInPicture]);
+  }, [iconProps, pictureInPictureEnabled, pip, loop, requestPictureInPicture, exitPictureInPicture, onLoopClick]);
 
   return {
     handleContextMenu,

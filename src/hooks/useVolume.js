@@ -15,7 +15,7 @@ const useVolume = ({ prevented, muted, videoRef, src, updateState }) => {
         muted,
       });
     },
-    [videoRef],
+    [videoRef, updateState],
   );
 
   const onMutedClick = React.useCallback(() => {
@@ -33,7 +33,7 @@ const useVolume = ({ prevented, muted, videoRef, src, updateState }) => {
         muted: !videoElement.muted,
       });
     }
-  }, [videoRef, prevented, muted]);
+  }, [videoRef, prevented, muted, updateState]);
 
   const changeVolume = React.useCallback(
     (v) => {
@@ -53,7 +53,7 @@ const useVolume = ({ prevented, muted, videoRef, src, updateState }) => {
         muted,
       });
     },
-    [videoRef],
+    [videoRef, updateState],
   );
 
   const updateVolumeWithCallback = React.useCallback(
@@ -87,7 +87,7 @@ const useVolume = ({ prevented, muted, videoRef, src, updateState }) => {
     return () => {
       el.removeEventListener('volumechange', onVolumeChange);
     };
-  }, [onVolumeChange]);
+  }, [onVolumeChange, videoRef]);
 
   React.useEffect(() => {
     if (!videoRef.current) {

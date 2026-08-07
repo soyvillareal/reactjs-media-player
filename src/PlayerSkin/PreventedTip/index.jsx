@@ -9,20 +9,19 @@ const PreventedTip = ({ hasResource = false, prevented, paused, muted, currentTi
 
   const [preventedClicked, setPreventedClicked] = React.useState(false);
 
-  const handleClick = (e) => {
-    setPreventedClicked(true);
-    onClick(e);
-  };
-
   const renderPreventedClickedTip = React.useCallback(() => {
     if (hasResource === false || prevented === false || paused) {
       return null;
     }
 
     if (muted === true && !preventedClicked) {
+      const handleClickInner = (e) => {
+        setPreventedClicked(true);
+        onClick(e);
+      };
       return (
         <React.Fragment key="preventedClickedTip">
-          <StyledPeventedTipClicked onClick={handleClick} />
+          <StyledPeventedTipClicked onClick={handleClickInner} />
           <StyledPeventedTip>
             <StyledMutedIcon />
             {i18n.clickToUnmute}
@@ -32,7 +31,7 @@ const PreventedTip = ({ hasResource = false, prevented, paused, muted, currentTi
     }
 
     return null;
-  }, [hasResource, prevented, preventedClicked]);
+  }, [hasResource, prevented, preventedClicked, onClick, i18n.clickToUnmute, muted, paused]);
 
   const renderPreventedTip = React.useCallback(() => {
     if (hasResource === false || prevented === false) {
@@ -51,7 +50,7 @@ const PreventedTip = ({ hasResource = false, prevented, paused, muted, currentTi
     }
 
     return null;
-  }, [currentTime, paused]);
+  }, [currentTime, paused, hasResource, i18n.playbackStuckClickResumePlayback, prevented]);
 
   return [renderPreventedTip(), renderPreventedClickedTip()];
 };

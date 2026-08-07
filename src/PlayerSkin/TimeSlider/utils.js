@@ -78,7 +78,7 @@ const timeCodeToSeconds = (timeCode) => {
   }
   if (timeCode.indexOf(';') > 0) {
     timeCode = timeCode.replace(';', ':');
-    if (!/\d{2}(\:\d{2}){0,3}/i.test(timeCode)) {
+    if (!/\d{2}(:\d{2}){0,3}/i.test(timeCode)) {
       throw new TypeError('Time code must have the format `00:00:00`');
     }
   }

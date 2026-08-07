@@ -68,7 +68,7 @@ const usePlayerSkinWrapper = ({
       updateState((prev) => ({ ...prev, played: time }));
       player.seekTo(time);
     },
-    [player],
+    [player, updateState],
   );
 
   const updateCurrentTimeWithCallback = React.useCallback(
@@ -81,7 +81,7 @@ const usePlayerSkinWrapper = ({
       const newCurrentTime = callback(currenTime, duration);
       changeCurrentTime(newCurrentTime);
     },
-    [player],
+    [player, changeCurrentTime],
   );
 
   const memorizedProps = React.useMemo(() => {
@@ -108,7 +108,7 @@ const usePlayerSkinWrapper = ({
       onPreventedClick: () => updateState((prev) => ({ ...prev, isMuted: false, volume: 1 })),
       changeCurrentTime,
     };
-  }, [player]);
+  }, [player, changeCurrentTime, onMutedClick, updateState]);
 
   const handleKeyDown = React.useCallback(
     (e) => {
@@ -167,7 +167,14 @@ const usePlayerSkinWrapper = ({
         }
       }
     },
-    [player],
+    [
+      player,
+      updateState,
+      requestToggleFullscreen,
+      onMutedClick,
+      updateCurrentTimeWithCallback,
+      updateVolumeWithCallback,
+    ],
   );
 
   React.useImperativeHandle(ref, () => ({
@@ -176,7 +183,7 @@ const usePlayerSkinWrapper = ({
 
   React.useEffect(() => {
     videoRef.current = player?.getPlayer() ?? null;
-  }, [player?.getPlayer]);
+  }, [player]);
 
   return {
     playerSkinRef,

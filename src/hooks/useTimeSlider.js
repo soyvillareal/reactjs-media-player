@@ -36,7 +36,7 @@ const useTimeSlider = ({ timelensRef, currentTime, duration, onChange, onSeeking
         timelensRef.current.handleTimelens(e);
       }
     },
-    [onChange, duration, dispatch, timelensRef],
+    [onChange, duration, dispatch, timelensRef, onSeeking],
   );
 
   const onMouseDown = React.useCallback(
@@ -61,7 +61,7 @@ const useTimeSlider = ({ timelensRef, currentTime, duration, onChange, onSeeking
         onSeeking(true);
       }
     },
-    [timelensRef],
+    [timelensRef, dispatch, onSeeking],
   );
 
   const onMouseUp = React.useCallback(
@@ -91,7 +91,7 @@ const useTimeSlider = ({ timelensRef, currentTime, duration, onChange, onSeeking
         timelensRef.current.setShowTimelens(false);
       }
     },
-    [onChange, duration, timeSliderRect, dispatch],
+    [onChange, duration, timeSliderRect, dispatch, onSeeking, timelensRef],
   );
 
   const onMouseMove = React.useCallback(
@@ -114,7 +114,7 @@ const useTimeSlider = ({ timelensRef, currentTime, duration, onChange, onSeeking
         timelensRef.current.handleTimelens(e);
       }
     },
-    [duration, timeSliderRect],
+    [duration, timeSliderRect, timelensRef],
   );
 
   React.useEffect(() => {

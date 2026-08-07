@@ -14,7 +14,7 @@ const useAppDispatch = () => {
         dispatch(action);
       }
     },
-    [state],
+    [state, dispatch],
   );
 
   return enhancedDispatch;

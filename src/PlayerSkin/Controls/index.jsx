@@ -17,11 +17,11 @@ const Controls = ({ children }) => {
       }
     }
     dispatch({ type: 'controlsHovering', payload: true });
-  }, []);
+  }, [dispatch]);
 
   const onMouseLeave = React.useCallback(() => {
     dispatch({ type: 'controlsHovering', payload: false });
-  }, []);
+  }, [dispatch]);
 
   return (
     <StyledControls hiding={state.hiding} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
