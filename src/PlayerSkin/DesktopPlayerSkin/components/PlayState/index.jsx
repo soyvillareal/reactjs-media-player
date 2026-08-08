@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { StyledPlayButton } from './PlayState.styled';
-import PlayIcon from '../../Commons/Icons/PlayIcon';
-import SpinnerLoading from '../../Commons/Icons/SpinnerLoading';
+import PlayIcon from '../../../Commons/Icons/PlayIcon';
+import SpinnerLoading from '../../../Commons/Icons/SpinnerLoading';
 
 const PlayState = ({ hasResource, loading, paused, ended, seeking, waiting, kernelMsg, onClick }) => {
   if (hasResource === false || loading || kernelMsg) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import GeneralButton from '../../Commons/Buttons/StyledGeneralButton';
+import GeneralButton from '../../../Commons/Buttons/StyledGeneralButton';
 import { sliderWith } from '../../DesktopPlayerSkin.constants';
 
 export const SliderWrapper = React.forwardRef(({ isFullscreen, ...rest }, ref) => <div ref={ref} {...rest} />);

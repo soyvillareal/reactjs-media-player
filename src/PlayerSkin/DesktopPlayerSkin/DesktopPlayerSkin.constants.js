@@ -28,6 +28,8 @@ export const keyMappings = {
   n: 'N_KEY', // Not used yet
 };
 
+export { buildIconProps } from '../Commons/constants';
+
 export const sliderWith = (isFullscreen) => {
   if (isFullscreen) {
     return 83;
@@ -36,16 +38,4 @@ export const sliderWith = (isFullscreen) => {
   return 55;
 };
 
-export const buildIconProps = (isFullscreen) => {
-  if (isFullscreen) {
-    return {
-      width: 54,
-      height: 54,
-    };
-  }
 
-  return {
-    width: 36,
-    height: 36,
-  };
-};

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { StyledSliderContainer } from './Volume.styled';
-import StyledGeneralButton from '../../Commons/Buttons/StyledGeneralButton';
+import StyledGeneralButton from '../../../Commons/Buttons/StyledGeneralButton';
 import VolumeSlider from '../Controls/components/VolumeSlider';
 import useAppSelector from '../../../../hooks/context/useAppSelector';
 import useVolumeButton from '../../../../hooks/useVolumeButton';

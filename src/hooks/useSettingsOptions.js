@@ -5,7 +5,7 @@ import useAppDispatch from './context/useAppDispatch';
 import { initialSettings } from './hooks.constants';
 import { buildSettingsLabel } from '../PlayerSkin/DesktopPlayerSkin/components/Controls/components/SettingsButton/DropdownOverlay.constants';
 import { settingsOverlayFn } from '../PlayerSkin/DesktopPlayerSkin/components/Controls/components/SettingsButton/SettingsButton.constants';
-import { buildIconProps } from '../PlayerSkin/DesktopPlayerSkin/DesktopPlayerSkin.constants';
+import { buildIconProps } from '../PlayerSkin/Commons/constants';
 
 const useSettingsOptions = ({ live, fullHDQualityBreak, qualities, playbackRate, changeSettings, fullscreen }) => {
   const { i18n } = useAppSelector();

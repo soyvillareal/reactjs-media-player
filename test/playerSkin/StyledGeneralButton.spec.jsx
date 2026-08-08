@@ -17,7 +17,7 @@ jest.mock('../../src/hooks/context/useAppSelector', () => {
   }));
 });
 
-import StyledGeneralButton from '../../src/PlayerSkin/DesktopPlayerSkin/Commons/Buttons/StyledGeneralButton';
+import StyledGeneralButton from '../../src/PlayerSkin/Commons/Buttons/StyledGeneralButton';
 
 const wrapper = ({ children }) => <AppContextProvider language="en">{children}</AppContextProvider>;
 

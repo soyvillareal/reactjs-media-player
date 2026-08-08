@@ -11,9 +11,9 @@ import {
   StyledDropdownTitle,
   StyledDropdownValue,
 } from './SettingsButton.styled';
-import StyledGeneralButton from '../../../../Commons/Buttons/StyledGeneralButton';
-import SettingsIcon from '../../../../Commons/Icons/SetttingsIcon';
-import ArrowRightIcon from '../../../../Commons/Icons/ArrowRightIcon';
+import StyledGeneralButton from '../../../../../Commons/Buttons/StyledGeneralButton';
+import SettingsIcon from '../../../../../Commons/Icons/SetttingsIcon';
+import ArrowRightIcon from '../../../../../Commons/Icons/ArrowRightIcon';
 import { StyledDropdownOverlayScrolled } from './DropdownOverlay/DropdownOverlay.styled';
 import useAppSelector from '../../../../../../hooks/context/useAppSelector';
 import useSettingsOptions from '../../../../../../hooks/useSettingsOptions';

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import StyledGeneralButton from '../../../../Commons/Buttons/StyledGeneralButton';
+import StyledGeneralButton from '../../../../../Commons/Buttons/StyledGeneralButton';
 
 export const StyledDropdownContainer = styled.div`
   position: relative;

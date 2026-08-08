@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import StyledGeneralButton from '../../../../Commons/Buttons/StyledGeneralButton';
-import FullscreenIcon from '../../../../Commons/Icons/FullscreenIcon';
-import UnfullscreenIcon from '../../../../Commons/Icons/UnfullscreenIcon';
+import StyledGeneralButton from '../../../../../Commons/Buttons/StyledGeneralButton';
+import FullscreenIcon from '../../../../../Commons/Icons/FullscreenIcon';
+import UnfullscreenIcon from '../../../../../Commons/Icons/UnfullscreenIcon';
 import { buildIconProps } from '../../../../DesktopPlayerSkin.constants';
 import useAppSelector from '../../../../../../hooks/context/useAppSelector';
 

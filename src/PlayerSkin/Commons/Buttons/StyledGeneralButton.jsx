@@ -1,9 +1,9 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import useAppSelector from '../../../../hooks/context/useAppSelector';
-import { StyledMediaPlayerWrapper } from '../../../../MediaPlayer/components/MediaPlayerWrapper/MediaPlayerWrapper.styled';
-import { StyledPlayerSkin } from '../../DesktopPlayerSkin.styled';
+import useAppSelector from '../../../hooks/context/useAppSelector';
+import { StyledMediaPlayerWrapper } from '../../../MediaPlayer/components/MediaPlayerWrapper/MediaPlayerWrapper.styled';
+import { StyledPlayerSkin } from '../../DesktopPlayerSkin/DesktopPlayerSkin.styled';
 
 const baseButtonStyles = css`
   display: flex;

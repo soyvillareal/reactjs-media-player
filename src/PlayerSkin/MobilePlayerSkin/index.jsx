@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { StyledMobilePlayerSkin, StyledOverlay } from './MobilePlayerSkin.styled';
-import { GlobalStyle, StyledOverlayPoster, StyledPoster } from '../DesktopPlayerSkin/DesktopPlayerSkin.styled';
+import { GlobalStyle, StyledOverlayPoster, StyledPoster } from '../Commons/SharedStyles';
 
 import MobileTopBar from './components/MobileTopBar';
 import MobileCenterControls from './components/MobileCenterControls';
 import MobileBottomBar from './components/MobileBottomBar';
 import SkipOverlay from './components/SkipOverlay';
 import MobileSettingsPanel from './components/MobileSettingsPanel';
-import ContextMenu from '../DesktopPlayerSkin/components/ContextMenu';
-import TopState from '../DesktopPlayerSkin/components/TopState';
-import PreventedTip from '../DesktopPlayerSkin/components/PreventedTip';
+import ContextMenu from '../Commons/ContextMenu';
+import TopState from '../Commons/TopState';
+import PreventedTip from '../Commons/PreventedTip';
 
 import useMobileAutoHide from '../../hooks/useMobileAutoHide';
 import useDoubleTapSkip from '../../hooks/useDoubleTapSkip';

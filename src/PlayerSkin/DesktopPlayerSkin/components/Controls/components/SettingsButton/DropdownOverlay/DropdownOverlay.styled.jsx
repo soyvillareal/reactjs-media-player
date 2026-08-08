@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import DropdownOverlay from '.';
-import StyledGeneralButton from '../../../../../Commons/Buttons/StyledGeneralButton';
+import StyledGeneralButton from '../../../../../../Commons/Buttons/StyledGeneralButton';
 import { StyledMediaPlayerWrapper } from '../../../../../../../MediaPlayer/components/MediaPlayerWrapper/MediaPlayerWrapper.styled';
 import { StyledPlayerSkin } from '../../../../../DesktopPlayerSkin.styled';
 

@@ -7,8 +7,8 @@ import {
   StyledDropdownItemValueSub,
   StyledDropdownList,
 } from './DropdownOverlay.styled';
-import ArrowLeftIcon from '../../../../../Commons/Icons/ArrowLeftIcon';
-import StyledGeneralButton from '../../../../../Commons/Buttons/StyledGeneralButton';
+import ArrowLeftIcon from '../../../../../../Commons/Icons/ArrowLeftIcon';
+import StyledGeneralButton from '../../../../../../Commons/Buttons/StyledGeneralButton';
 import useAppSelector from '../../../../../../../hooks/context/useAppSelector';
 
 const DropdownOverlay = React.forwardRef(

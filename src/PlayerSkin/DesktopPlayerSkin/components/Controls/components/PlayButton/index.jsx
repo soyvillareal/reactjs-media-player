@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import StyledGeneralButton from '../../../../Commons/Buttons/StyledGeneralButton';
-import PauseIcon from '../../../../Commons/Icons/PauseIcon';
-import PlayIcon from '../../../../Commons/Icons/PlayIcon';
+import StyledGeneralButton from '../../../../../Commons/Buttons/StyledGeneralButton';
+import PauseIcon from '../../../../../Commons/Icons/PauseIcon';
+import PlayIcon from '../../../../../Commons/Icons/PlayIcon';
 import { buildIconProps } from '../../../../DesktopPlayerSkin.constants';
 import useAppSelector from '../../../../../../hooks/context/useAppSelector';
 

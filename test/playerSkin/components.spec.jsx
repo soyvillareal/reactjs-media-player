@@ -5,9 +5,9 @@ import { AppContextProvider } from '../../src/context/AppContextProvider';
 // Components under test
 import PlayTime from '../../src/PlayerSkin/DesktopPlayerSkin/components/PlayTime';
 import PlayState from '../../src/PlayerSkin/DesktopPlayerSkin/components/PlayState';
-import TopState from '../../src/PlayerSkin/DesktopPlayerSkin/components/TopState';
-import PreventedTip from '../../src/PlayerSkin/DesktopPlayerSkin/components/PreventedTip';
-import ContextMenu from '../../src/PlayerSkin/DesktopPlayerSkin/components/ContextMenu';
+import TopState from '../../src/PlayerSkin/Commons/TopState';
+import PreventedTip from '../../src/PlayerSkin/Commons/PreventedTip';
+import ContextMenu from '../../src/PlayerSkin/Commons/ContextMenu';
 
 const wrap = (ui) => render(<AppContextProvider language="en">{ui}</AppContextProvider>);
 
