@@ -207,6 +207,7 @@ export const createMediaPlayer = (player) => {
           progressFrequency={this.props.progressFrequency}
           spriteVTTFile={this.props.spriteVTTFile}
           poster={this.props.poster}
+          forceMobile={this.props.forceMobile}
         />
       );
     };

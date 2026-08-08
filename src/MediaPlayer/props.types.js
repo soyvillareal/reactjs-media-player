@@ -32,6 +32,7 @@ export const propTypes = {
   waiting: bool,
   prevented: bool,
   wrapper: oneOfType([string, func, shape({ render: func.isRequired })]),
+  forceMobile: bool,
   config: shape({
     attributes: object,
     tracks: array,
@@ -83,6 +84,7 @@ export const defaultProps = {
   waiting: false,
   prevented: false,
   wrapper: 'div',
+  forceMobile: undefined,
   language: availableLanguages[0],
   poster: '',
   config: {

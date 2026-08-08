@@ -201,6 +201,7 @@ const MediaPlayerSkin = React.forwardRef((props, ref) => {
         poster={props.poster}
         updateState={setPlayerState}
         player={props.player}
+        forceMobile={props.forceMobile}
       />
     </MediaPlayerWrapper>
   );
@@ -238,6 +239,7 @@ export default React.memo(
     p.language === n.language &&
     p.poster === n.poster &&
     p.config === n.config &&
+    p.forceMobile === n.forceMobile &&
     p.onReady === n.onReady &&
     p.onStart === n.onStart &&
     p.onPlay === n.onPlay &&

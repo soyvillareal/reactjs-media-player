@@ -11,6 +11,7 @@ yarn-error.log
 .kiro
 .vscode/
 /examples/local
+TubeakPlayer
 /examples/react/public/uploads
 *.flv
 *.mp4

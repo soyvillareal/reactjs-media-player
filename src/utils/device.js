@@ -1,9 +1,10 @@
 let isDesktop = false;
+let isMobile = false;
 
 /**
- * Detect if the user is on a desktop device
- * @returns {boolean}
- * @description This function detects if the user is on a desktop device
+ * Detect if the user is on a desktop or mobile device
+ * @description Detects device type based on user agent and touch capabilities.
+ * isMobile includes phones and tablets.
  */
 
 function callback() {
@@ -20,11 +21,13 @@ function callback() {
 
   if (isMobileDevice || isTabletDevice) {
     isDesktop = false;
+    isMobile = true;
   } else {
     isDesktop = isLikelyDesktop;
+    isMobile = !isLikelyDesktop;
   }
 }
 
 callback();
 
-export { isDesktop };
+export { isDesktop, isMobile };

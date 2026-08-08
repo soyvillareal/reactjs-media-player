@@ -176,6 +176,7 @@ const App = () => {
             sources={[]}
             prevented={false}
             waiting={false}
+            forceMobile={true}
             playing={state.playing}
             muted={state.muted}
             pip={state.pip}
