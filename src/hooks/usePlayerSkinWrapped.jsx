@@ -2,9 +2,9 @@ import React from 'react';
 
 import useAppDispatch from './context/useAppDispatch';
 import useAppSelector from './context/useAppSelector';
-import InLoopIcon from '../PlayerSkin/Commons/Icons/InLoopIcon';
-import PipIcon from '../PlayerSkin/Commons/Icons/PipIcon';
-import { buildIconProps } from '../PlayerSkin/PlayerSkin.constants';
+import InLoopIcon from '../PlayerSkin/DesktopPlayerSkin/Commons/Icons/InLoopIcon';
+import PipIcon from '../PlayerSkin/DesktopPlayerSkin/Commons/Icons/PipIcon';
+import { buildIconProps } from '../PlayerSkin/DesktopPlayerSkin/DesktopPlayerSkin.constants';
 
 const usePlayerSkinWrapped = ({
   fullscreen,

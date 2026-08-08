@@ -1,4 +1,4 @@
-import { getVolume } from '../../src/PlayerSkin/Controls/components/VolumeSlider/utils';
+import { getVolume } from '../../src/PlayerSkin/DesktopPlayerSkin/components/Controls/components/VolumeSlider/utils';
 
 describe('VolumeSlider utils - getVolume', () => {
   const makeSliderRef = (left, width) => ({

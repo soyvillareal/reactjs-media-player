@@ -3,7 +3,7 @@ import {
   keyMappings,
   sliderWith,
   buildIconProps,
-} from '../../src/PlayerSkin/PlayerSkin.constants';
+} from '../../src/PlayerSkin/DesktopPlayerSkin/DesktopPlayerSkin.constants';
 
 describe('PlayerSkin.constants', () => {
   describe('eventsKeyCodes', () => {

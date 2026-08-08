@@ -6,7 +6,7 @@ import {
   getMouseTranslateX,
   parseVTT,
   getOffset,
-} from '../../src/PlayerSkin/TimeSlider/utils';
+} from '../../src/PlayerSkin/DesktopPlayerSkin/components/TimeSlider/utils';
 
 describe('TimeSlider utils', () => {
   describe('getEventXCoordinate', () => {

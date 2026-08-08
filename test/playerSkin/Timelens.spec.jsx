@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
 import { AppContextProvider } from '../../src/context/AppContextProvider';
-import Timelens from '../../src/PlayerSkin/TimeSlider/components/Timelens';
+import Timelens from '../../src/PlayerSkin/DesktopPlayerSkin/components/TimeSlider/components/Timelens';
 
 // Mock fetch for VTT loading
 const mockVTT = `WEBVTT
