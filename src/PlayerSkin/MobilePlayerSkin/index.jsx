@@ -228,7 +228,9 @@ const MobilePlayerSkin = React.forwardRef(
           onExitFullscreen={exitFullscreen}
         />
 
-        <TopState hasResource={hasResource} loading={loading} kernelMsg={kernelMsg} />
+        {/* Mobile renders its own loading spinner in the center play button,
+            so TopState only handles kernel/error messages here. */}
+        <TopState hasResource={hasResource} kernelMsg={kernelMsg} />
       </StyledMobilePlayerSkin>
     );
   },
